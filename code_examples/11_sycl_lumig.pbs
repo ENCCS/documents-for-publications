@@ -1,0 +1,3 @@
+$ dpct program.cu
+$ cd dpct_output/
+$ icpx -fsycl program.dp.cpp

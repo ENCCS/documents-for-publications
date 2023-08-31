@@ -1,0 +1,1 @@
+//// OpenAcc//#pragma acc enter data [clauses]#pragma acc exit data//// OpenMP//#pragma omp target enter data [clauses]#pragma omp target exit data

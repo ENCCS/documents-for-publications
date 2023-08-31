@@ -1,0 +1,1 @@
+//// OpenAcc//#pragma acc data [clauses] {structured-block}//// OpenMP//#pragma omp target data [clauses]{structured-block}

@@ -1,0 +1,51 @@
+#
+# step 1
+#
+$ git clone -b clacc/main https://github.com/llvm-doe-org/llvm-project.git
+$ cd llvm-project
+$ mkdir build && cd build
+$ cmake -DCMAKE_INSTALL_PREFIX=../install     \
+   -DCMAKE_BUILD_TYPE=Release            \
+   -DLLVM_ENABLE_PROJECTS="clang;lld"    \
+   -DLLVM_ENABLE_RUNTIMES=openmp         \
+   -DLLVM_TARGETS_TO_BUILD="host;AMDGPU" \
+   -DCMAKE_C_COMPILER=gcc                \
+   -DCMAKE_CXX_COMPILER=g++              \
+   ../llvm
+$ make
+$ make install
+
+
+
+#
+# step 2
+#
+$ export PATH=/project/project_xxxxxx/Clacc/llvm-project/install/bin:$PATH
+$ export LD_LIBRARY_PATH=/project/project_xxxxxx/Clacc/llvm-project/install/lib:$LD_LIBRARY_PATH
+
+
+
+#
+# step 3
+#
+$ clang -fopenacc-print=omp -fopenacc-structured-ref-count-omp=no-ompx-hold openACC_code.c > openMP_code.c
+
+
+
+#
+# step 4
+#
+module load CrayEnv
+module load PrgEnv-cray
+module load craype-accel-amd-gfx90a
+module load rocm/5.2.3
+
+cc -fopenmp -o executable openMP_code.c
+
+
+
+#
+# exercise
+#
+$ git clone https://github.com/ENCCS/gpu-programming.git
+$ cd gpu-programming/content/examples/exercise_clacc

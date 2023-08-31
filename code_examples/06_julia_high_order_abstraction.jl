@@ -1,0 +1,1 @@
+## broadcast#broadcast(A) do x    x += 1end## map#map(A) do x    x + 1end## reduce#reduce(+, A)## accumulate#accumulate(+, A)

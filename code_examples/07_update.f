@@ -1,0 +1,1 @@
+program ex_update	implicit none	integer :: x	x = 0	!$acc data copy(x)	! check point 1	x = 10	! check point 2	!$acc update device(x)	! check point 3	!$acc end dataend program ex_update

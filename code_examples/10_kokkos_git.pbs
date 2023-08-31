@@ -1,0 +1,1 @@
+$ git clone https://github.com/kokkos/kokkos.git$ Copy the above Makefile into the current folder (make sure the indentation of the last line is tab, and not space)$ Copy the above hello.cpp file into the current folder$ make$ ./hello

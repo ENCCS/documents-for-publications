@@ -1,0 +1,1 @@
+using AMDGPUusing BenchmarkToolsN = [9, 10, 11, 12]for n in N   A = rand(2^n, 2^n); A_d = ROCArray(A);   @btime $A * $A;   @btime begin      $A_d * $A_d;      AMDGPU.synchronize()   endend

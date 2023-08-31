@@ -1,0 +1,1 @@
+## modules on LUMI#ml CrayEnvml PrgEnv-crayml cray-mpichml rocmml craype-accel-amd-gfx90a# Compiling MPI-OpenACC$ ftn -hacc -o mycode.mpiacc.exe mycode_mpiacc.f90# Compiling MPI-OpenMP$ ftn -homp -o mycode.mpiomp.exe mycode_mpiomp.f90## git#$ git clone https://github.com/ENCCS/gpu-programming.git$ cd gpu-programming/content/examples/exercise_multipleGPU

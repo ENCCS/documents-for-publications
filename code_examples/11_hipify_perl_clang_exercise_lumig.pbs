@@ -1,0 +1,29 @@
+#
+# hipify-perl
+#
+$ module load rocm/5.2.3
+$ hipify-clang --perl
+
+$ hipify-perl program.cu > program.cu.hip
+
+$ hipcc --offload-arch=gfx90a -o program.hip.exe program.cu.hip
+
+
+#
+# hipify-clang
+#
+$ singularity pull docker://nvcr.io/nvidia/cuda:11.4.3-devel-ubuntu20.04
+
+$ module load rocm/5.2.3
+$ singularity shell -B $PWD,/opt:/opt cuda_11.4.0-devel-ubuntu20.04.sif
+
+$ export PATH=/opt/rocm-5.2.3/bin:$PATH
+
+$ hipify-clang program.cu -o hip_program.cu.hip --cuda-path=/usr/local/cuda-11.4 -I /usr/local/cuda-11.4/include
+
+
+#
+# hipify-exercises
+#
+$ git clone https://github.com/ENCCS/gpu-programming.git
+$ cd gpu-programming/content/examples/exercise_hipify

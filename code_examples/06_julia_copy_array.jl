@@ -1,0 +1,1 @@
+## NVIDIA#using CUDAA_d = CuArray([1,2,3,4])A_d .+= 1## AMD#using AMDGPUA_d = ROCArray([1,2,3,4])A_d .+= 1## Intel#using oneAPIA_d = oneArray([1,2,3,4])A_d .+= 1## Apple#using MetalA_d = MtlArray([1,2,3,4])A_d .+= 1## Moving an array back from the GPU to the CPU is simple#A = Array(A_d)

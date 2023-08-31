@@ -1,0 +1,1 @@
+!! OpenAcc!!$acc enter data [clauses]!$acc exit data!! OpenMP!!$omp target enter data [clauses]!$omp target exit data

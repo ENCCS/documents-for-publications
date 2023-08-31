@@ -1,0 +1,1 @@
+!! OpenAcc!!$acc data [clauses]  structured-block!$acc end data!! OpenMP!!$omp target data [clauses] structured-block!$omp end target data
