@@ -1,0 +1,243 @@
+\section{GPU Hardware and Software Ecosystem}
+
+
+\subsection{Overview of GPU hardware}
+
+
+\par
+GPU hardware is a specialized type of processor designed primarily for rendering and manipulating graphics.
+Over times, GPUs have evolved to become highly parallel accelerators capable of performing a wide range of general-purpose computing tasks.
+One of the most important features that allows these accelerators to reach their high performance computing capability is their scalability. 
+Computational cores on accelerators are usually grouped into multiprocessors, and these multiprocessors share the data and logical elements.
+This allows to achieve a very high density of compute elements on a GPU, and also allows for better scaling: more multiprocessors means more raw performance and this is very easy to achieve with more transistors available.
+
+
+\par
+Accelerators are a separate main circuit board with the processor, memory, power management, $etc$.
+It is connected to the motherboard with CPUs via PCIe bus(Fig.~\ref{fig:cpu_gpu_architecture}).
+Having its own memory means that the data has to be copied to and from it.
+CPU acts as a main processor, controlling the execution workflow.
+It copies the data from its own memory to the GPU memory, executes the program and copies the results back.
+GPUs are coprocessors (helpers) to CPUs, and run tens of thousands of threads simultaneously on thousands of cores and does not do much of the data management.
+With many cores trying to access the memory simultaneously and with little cache available, the accelerator can run out of memory very quickly.
+This makes the data management and its access pattern is essential on the GPU.
+Accelerators like to be overloaded with the number of threads, because they can switch between threads very quickly.
+This allows to hide the memory operations: while some threads wait, others can compute.
+
+
+% -------------------------------------------------------------------- %
+
+
+\subsection{How do GPUs differ from CPUs?}
+
+
+\par
+CPUs and GPUs were designed with different goals in mind.
+While the CPU is designed to excel at executing a sequence of operations, called a thread, as fast as possible and can execute a few tens of these threads in parallel, the GPU is designed to excel at executing many thousands of them in parallel.
+GPUs were initially developed for highly-parallel task of graphic processing and therefore designed such that more transistors are devoted to data processing rather than data caching and flow control.
+More transistors dedicated to data processing is beneficial for highly parallel computations; the GPU can hide memory access latencies with computation, instead of relying on large data caches and complex flow control to avoid long memory access latencies, both of which are expensive in terms of transistors.
+A short summary of the difference between CPU and GPU is provided in Table~\ref{tbl:difference_cpu_gpu}.
+
+
+\begin{table}[!h]
+\centering\caption{The general difference between CPU and GPU.}\label{tbl:difference_cpu_gpu}
+\begin{tabular}{ |c|c| }
+\hline
+\textbf{CPU} & \textbf{GPU} \\
+\hline
+General purpose & Highly specialized for parallelism \\ 
+Good for serial processing & Good for parallel processing \\ 
+Great for task parallelism & Great for data parallelism \\ 
+Low latency per thread & High-throughput \\
+Large area dedicated cache and control & Hundreds of floating-point execution units \\
+\hline
+\end{tabular}
+\end{table}
+
+
+% -------------------------------------------------------------------- %
+
+
+\subsection{GPU platforms}
+
+
+\par
+GPUs come together with software stacks or APIs that work in conjunction with the hardware and give a standard way for the software to interact with the GPU hardware.
+They are used by software developers to write code that can take advantage of the parallel processing power of the GPU, and they provide a standard way for software to interact with the GPU hardware.
+Typically, they provide access to low-level functionality, such as memory management, data transfer between the CPU and the GPU, and the scheduling and execution of parallel processing tasks on the GPU.
+They may also provide higher level functions and libraries optimized for specific HPC workloads, like linear algebra or fast Fourier transforms. 
+Finally, in order to facilitate the developers to optimize and write correct codes, debugging and profiling tools are also included.
+
+
+\par
+Three major GPU vendors, NVIDIA, AMD, and Intel, have designed their own computing platforms~\textbf{CUDA},~\textbf{ROCm}, and~\textbf{oneAPI}, respectively.
+This way they can offer optimization, differentiation (offering unique features tailored to their devices), vendor lock-in, licensing, and royalty fees, which can result in better performance, profitability, and customer loyalty.
+There are also cross-platform APIs such~\textbf{DirectCompute} (only for Windows operating system),~\textbf{OpenCL}, and~\textbf{SYCL}.
+
+
+\subsubsection{CUDA}
+
+
+\par
+CUDA is the parallel computing platform and API developed by NVIDIA.
+The CUDA API provides a comprehensive set of functions and tools for developing high-performance applications that run on NVIDIA GPUs.
+It consists of two main components: the CUDA Toolkit and the CUDA driver.
+The toolkit provides a set of libraries, compilers, and development tools for programming and optimizing CUDA applications, while the driver is responsible for communication between the host CPU and the device GPU.
+CUDA is designed to work with programming languages such as C, C++, and Fortran.
+
+
+\par
+The CUDA provides a programming model and tools that enable developers to write software applications that can run on NVIDIA GPUs.
+It includes a specialized language extension called CUDA C/C++, which is an extension of the C and C++ programming languages.
+There are several compilers that can be used for developing and executing code on NVIDIA GPUs:~\textbf{nvcc}.
+The latest versions are based on the widely used LLVM (low level virtual machine) open source compiler infrastructure.
+The~\textbf{nvcc} produces optimized code for NVIDIA GPUs and drives a supported host compiler for AMD, Intel, OpenPOWER, and Arm CPUs.
+In addition to~\textbf{nvcc}, several other CUDA compilers are also provided, including~\textbf{nvc} (C11 compiler),~\textbf{nvc++} (C++17 compiler), and~\textbf{nvfortran} (ISO Fortran 2003 compiler).
+These compilers can also support GPU and multicore CPU programming with parallel language features, such as OpeanACC and OpenMP.
+This enables the developers to write code that can directly access and utilize the GPU's parallel computing capabilities.
+
+
+\par
+The CUDA provides a rich set of APIs and libraries such as:~\textbf{cuBLAS} (for linear algebra operations, such a dense matrix multiplication),~\textbf{cuFFT} (for performing fast Fourier transforms),~\textbf{cuRAND} (for generating pseudo-random numbers),~\textbf{cuSPARSE} (for sparse matrices operations),~\textbf{cuDNN} (for image and signal processing), $etc$.
+These libraries offer optimized implementations of common algorithms and functions.
+Using these libraries, developers can quickly and easily accelerate complex computations on NVIDIA GPUs without having to write low-level GPU code themselves.
+
+
+\par
+When programming mistakes are inevitable they have to be fixed as soon as possible.
+The CUDA toolkit includes the command line tool~\textbf{cuda-gdb} which can be used to find errors in the code.
+It is an extension to GDB, the GNU Project debugger.
+The existing GDB debugging features are inherently present for debugging the host code, and additional features have been provided to support debugging CUDA device code, allowing simultaneous debugging of both GPU and CPU code within the same application.
+The tool provides developers with a mechanism for debugging CUDA applications running on actual hardware.
+This enables developers to debug applications without the potential variations introduced by simulation and emulation environments.
+
+
+\par
+In addition to this the command line tool~\textbf{compute-sanitizer} can be used to look exclusively for memory access problems: unallocated buffers, out of bounds accesses, race conditions, and uninitialized variables.
+
+
+\par
+In order to utilize the GPUs at maximum some performance analysis tools.
+NVIDIA provides NVIDIA Nsight Systems and NVIDIA Nsight Compute tools to help developers to optimize their applications.
+The former, NVIDIA Nsight Systems, is a system-wide performance analysis tool that provides detailed metrics on both CPU and GPU usage, memory bandwidth, and other system-level metrics.
+The latter, NVIDIA Nsight Compute, is a kernel-level performance analysis tool that allows developers to analyze the performance of individual CUDA kernels.
+It provides detailed metrics on kernel execution, including memory usage, instruction throughput, and occupancy.
+These tools have graphical which can be used for all steps of the performance analysis, however on supercomputers it is recommended to use the command line interface for collecting the information needed and then visualize and analyse the results using the graphical interface on personal computers.
+
+
+\par
+Apart from what was presented above there are many others tools and features provided by NVIDIA.
+The CUDA eco-system is very well developed, and it enables developers to harness the computational power of NVIDIA GPUs for general-purpose computing tasks, offering significant acceleration for a wide range of applications through parallel execution and optimized libraries.
+
+
+\subsubsection{ROCm}
+
+
+\par
+ROCm is an open-source software platform developed by AMD that allows researchers to leverage the computational power of AMD accelerators.
+The ROCm platform is built on the foundation of open portability, supporting environments across multiple accelerator vendors and architectures.
+In some way it is very similar to CUDA API. It contains libraries, compilers, and development tools for programming and optimizing programs for AMD GPUs. For debugging, it provides the command line tool~\textbf{rocgdb}, while for performance analysis~\textbf{rocprof} and~\textbf{roctracer}.
+In order to produce code for the AMD GPUs, one can use the Heterogeneous-Computing Interface for Portability (HIP).
+HIP is a C++ runtime API and a set of tools that allows developers to write portable GPU-accelerated code for both NVIDIA and AMD platforms.
+It provides the~\textbf{hipcc} compiler driver, which will call the appropriate toolchain depending on the desired platform.
+On the AMD ROCm platform, HIP provides a header and runtime library built on top of the HIP-Clang (ROCm compiler).
+Libraries are prefixed by~\textbf{roc}, which can be called directly from HIP.
+In order to make portable calls, one can call the libraries using hip-prefixed wrappers.
+These wrappers can be used at no performance cost and ensure that HIP code can be used on other platforms with no changes.
+On NVIDIA platform, HIP provides a header file which translates from the HIP runtime APIs to CUDA runtime APIs.
+The header file contains mostly inlined functions and thus has very low overhead.
+The code is then compiled with~\textbf{nvcc}, the standard C++ compiler provided with CUDA.
+
+
+\par
+In addition, ROCm supports multiple programming models and languages for GPU programming, and also supports heterogeneous computing utilizing different types of processors (such as CPUs and GPUs) to perform specialized tasks.
+Additionally, ROCm provides support to OpenCL, allowing developers to write cross-platform GPU-accelerated applications.
+A collection of GPU-accelerated libraries optimized for AMD GPUs, including~\textbf{ROCm BLAS},~\textbf{ROCm FFT},~\textbf{MIOpen} (for deep learning),~\textbf{ROCm ScaLAPACK} (for numerical algorithms), $etc$, are also provided in the ROCm platform.
+These libraries are almost one-to-one equivalent to the ones supplied with CUDA.
+
+
+\par
+ROCm also integrates with popular machine learning frameworks, such as~\textbf{TensorFlow} and~\textbf{PyTorch}, and provides optimized libraries and drivers to accelerate machine learning workloads on AMD GPUs enabling the researchers to tap the power of ROCm and AMD accelerators to train and deploy machine learning models efficiently.
+
+
+\par
+The ROCm platform is continuously evolving, and AMD actively works on expanding its capabilities and compatibility. ROCm aims to create a robust ecosystem by collaborating with industry partners and supporting popular frameworks and tools. 
+
+
+\subsubsection{oneAPI}
+
+
+\par
+OneAPI is a unified software toolkit developed by Intel that allows developers to optimize and deploy applications across a variety of architectures, including CPUs, GPUs, and FPGAs (Field Programmable Gate Arrays).
+It provides a comprehensive set of tools, libraries, and frameworks, enabling developers to leverage the full potential of heterogeneous computing environments.
+With oneAPI, the developers can write code once and deploy it across different hardware targets without the need for significant modifications or rewriting.
+This approach promotes code reusability, productivity, and performance portability, as it abstracts the complexities of heterogeneous computing and provides a consistent programming interface based on open standards.
+
+
+\par
+The core of suite is~\textbf{Intel oneAPI Base Toolkit}, a set of tools and libraries for developing high-performance, data-centric applications across diverse architectures.
+It features an industry-leading C++ compiler that implements SYCL, an evolution of C++ for heterogeneous computing.
+It includes the Collective Communications Library, the Data Analytics Library, the Deep Neural Networks Library, the Math Kernel Library, the Video Processing Library, the DPC++/C++ Compiler, the DPC++ Library, the DPC++ Compatibility Tool, the Intel Distribution for Python, the Threading Building Blocks, the debugging tool Intel Distribution for GDB, the performance analisis tools Intel Adviser and Intel Vtune Profiler, the Integrated Performance Primitives,
+the FPGA Add-on for oneAPI Base Toolkit, $etc$.
+This can be complemented with additional toolkits.
+The~\textbf{Intel oneAPI HPC Toolkit} contains DPC++/C++ Compiler, Fortran and C++ Compiler Classic, debugging tools Cluster Checker and Inspector, the Intel MPI Library, and the performance analysis tool Intel Trace Analyzer and Collector.
+
+\par
+OneAPI supports multiple programming models and programming languages.
+It enables developers to write OpenMP codes targeting multi-core CPUs and Intel GPUs using the Classic Fortran and C++ compilers and as well SYCL programs for GPUs and FPGAs using the DPC++ compiler.
+Initially, the DPC++ compiler only targeted Intel GPUs using the oneAPI Level Zero low-level programming interface, but now support for NVIDIA GPUs (using CUDA) and AMD GPUs (using ROCm) has been added.
+Overall, Intel oneAPI offers a comprehensive and unified approach to heterogeneous computing, empowering developers to optimize and deploy applications across different architectures with ease.
+By abstracting the complexities and providing a consistent programming interface, oneAPI promotes code reusability, productivity, and performance portability, making it an invaluable toolkit for developers in the era of diverse computing platforms.
+
+
+% -------------------------------------------------------------------- %
+
+
+\subsection{Differences and similarities}
+
+
+\par
+GPUs in general support different features, even among the same producer, and additionally, new cards come with extra features and sometimes old features are not supported anymore.
+Varied GPU cards offer different GPU models catering to specific performance levels.
+A short list of terminology for different GPU hardware is listed in Table~\ref{tbl:gpu_terminology_nvidia_amd_intel}.
+
+
+\begin{table}[!h]
+\centering\caption{Terminology for different GPU Hardware.}\label{tbl:gpu_terminology_nvidia_amd_intel}
+\begin{tabular}{ |c|c|c| } 
+\hline
+\textbf{NVIDIA} & \textbf{AMD} & \textbf{Intel} \\
+\hline
+streaming processor/streaming core & SIMD lane & processing element \\
+SIMT unit & SIMD unit & Vector engine (XVE) \\
+Streaming Multiprocessor (SM) & Computing Unit (CU) & Xe-core/Execution unit (EU) \\
+GPU processing clusters (GPC) & Compute Engine & Xe-slice \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\par
+In addition, it is important to create binaries targeting specific architectures when compiling.
+A binary built for a newer card will not run on older devices, while a binary build for older devices might not run efficiently on newer architectures.
+In CUDA the compute capability which is targeted is specified by the~\textbf{\textcolor{brown}{-arch=sm\_XY}}, where $X$ specifies the major architecture and it is between 1 and 9, and $Y$ the minor.
+When using HIP on NVIDIA platforms one needs to use compiling option~\textbf{\textcolor{brown}{-{}-gpu-architecture=sm\_XY}}, while on AMD platforms~\textbf{\textcolor{brown}{-offload-arch=gfxabc}} (where $abc$ is the architecture code such as $90a$ for the MI200 series or $908$ for MI100 series).
+Note that in the case of portable (single source) programs one would specify openmp as well as target for compilation, enabling to run the same code on multicore CPU.
+A short summary of similarities and differences among GPU cards in terms of architecture, performance, software support, and target markets are provided below.
+Please keep in mind that this table is only a rough approximation.
+Each GPU architecture is different, and it’s impossible to make a 1-to-1 mapping between terms used by different vendors.
+
+
+% -------------------------------------------------------------------- %
+
+
+\subsection{Summary of GPU hardware}
+
+
+\begin{itemize}
+    \item GPUs are designed to execute thousands of threads simultaneously, making them highly parallel processors. In contrast, CPUs excel at executing a smaller number of threads in parallel.
+    \item GPUs allocate a larger portion of transistors to data processing rather than data caching and flow control. This prioritization of data processing enables GPUs to effectively handle parallel computations and hide memory access latencies through computation.
+    \item GPU producers provide comprehensive toolkits, libraries, and compilers for developing high-performance applications that leverage the parallel processing power of GPUs. Examples include CUDA (NVIDIA), ROCm (AMD), and oneAPI (Intel).
+    \item These platforms offer debugging tools ($e.g.$,~\textbf{cuda-gdb},~\textbf{rocgdb}) and performance analysis tools ($e.g.$, NVIDIA Nsight Systems, NVIDIA Nsight Compute,~\textbf{rocprof},~\textbf{roctracer}) to facilitate code optimization and ensure efficient utilization of GPU resources.
+\end{itemize}
+

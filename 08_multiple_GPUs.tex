@@ -1,0 +1,221 @@
+\section{Multiple GPU Programming with MPI}
+
+
+\subsection{Introduction}
+
+
+\par
+Exploring multiple GPUs across distributed nodes offers the potential to fully leveraging the capacity of modern HPC systems at a large scale.
+One of the approaches to accelerate computing on distributed systems is to combine MPI (Message Passing Interface) with a GPU programming model such as OpenACC and OpenMP.
+This combination is motivated by both the simplicity of these APIs, and the widespread use of MPI.
+
+
+\par
+In this guide we provide readers with insighits on implementing a hybrid model in which the MPI communication framework is combined with either OpenACC or OpenMP APIs.
+A special focus will be on performing point-to-point ($e.g.$,~\textbf{\textcolor{red}{MPI\_Send()}} and~\textbf{\textcolor{red}{MPI\_Recv()}}) and collective operations ($e.g.$~\textbf{\textcolor{red}{MPI\_Allreduce()}}) from OpenACC and OpenMP APIs.
+Herein we address two scenarios: (i) a scenario in which MPI operations are performed in the CPU-host followed by an offload to the GPU-device; and (ii) a scenario in which MPI operations are performed between a pair of GPUs without involving the CPU-host memory.
+The latter scenario is referred to as~\textbf{GPU-awareness MPI}, and has the advantage of reducing the computing time caused by transferring data $via$ the host-memory during heterogeneous communications, thus rendering HPC applications efficient.
+
+
+\par
+This guide in this section is organized as follows: we first introduce how to assign each MPI rank to a GPU device within the same node.
+We consider a situation in which the host and device have a distinct memory.
+This is followed by a presentation on the hybrid MPI-OpenACC/OpenMP offloading with and without the GPU-awareness MPI.
+Exercises to help understanding these concepts are provided at the end of this section.
+
+
+% -------------------------------------------------------------------- %
+
+
+\subsection{Assigning MPI-ranks to GPU-devices}
+
+
+\par
+Accelerating MPI applications to utilise multiple GPUs on distributed nodes requires as a first step assigning each MPI rank to a GPU device, such that two MPI ranks do not use the same GPU device.
+This is necessarily in order to prevent the application from a potential crash because GPUs are designed to handle multiple threading tasks, but not multiple MPI ranks.
+
+
+\par
+One way to ensure that two MPI ranks do not use the same GPU is to determine which MPI processes run on the same node, such that each process can be assigned to a GPU device within the same node.
+This can be done, for instance, by splitting the world communicator into sub-groups of communicators (or sub-communicators) using the routine~\textbf{\textcolor{red}{MPI\_COMM\_SPLIT\_TYPE()}} shown in List~\ref{lst:08_split_communicator_mpi}. 
+
+
+\lstinputlisting[language=fortran, caption={Splitting the world communicator into sub-groups of communicators in MPI.}, label={lst:08_split_communicator_mpi}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/08_split_communicator_mpi.f}
+
+
+\par
+Herein, the size of each sub-communicator corresponds to the number of GPUs per node (which is also the number of tasks per node), and each sub-communicator contains a list of processes indicated by a rank.
+These processes have a shared-memory region defined by the argument~\textbf{\textcolor{red}{MPI\_COMM\_TYPE\_SHARED()}} (see the~\href{https://www.mpi-forum.org/docs/mpi-4.0/mpi40-report.pdf}{MPI report} for more details).
+Calling the routine~\textbf{\textcolor{red}{MPI\_COMM\_SPLIT\_TYPE()}} returns a sub-communicator labelled as $host\_comm$ in List~\ref{lst:08_split_communicator_mpi}, and in which MPI-ranks are ranked from 0 to the number of processes per node -1.
+These MPI ranks are in turn assigned to different GPU devices within the same node.
+This procedure is done according to which directive-based model is implemented.
+The retrieved MPI ranks are then stored in the variable $myDevice$.
+The variable is passed to an OpenACC and OpenMP routine as indicated in the code examples in List~\ref{lst:08_assign_set_device_acc} and List~\ref{lst:08_assign_set_device_omp}, respectively.
+
+
+\lstinputlisting[language=fortran, firstline=4, caption={Assigning MPI ranks to different GPU devices and thereafter passing MPI ranks stored in the variable $myDevice$ to an OpenACC routine.}, label={lst:08_assign_set_device_acc}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/08_assign_set_device_acc.f}
+
+
+\lstinputlisting[language=fortran, firstline=4, caption={Assigning MPI ranks to different GPU devices and thereafter passing MPI ranks stored in the variable $myDevice$ to an OpenMP routine.}, label={lst:08_assign_set_device_omp}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/08_assign_set_device_omp.f}
+
+
+% ---------------------------------------------------------------------- %
+
+
+\subsection{Hybrid MPI-OpenACC/OpenMP without GPU-awareness approach}
+
+
+\par
+After covering how to assign each MPI-rank to a GPU device, we now address the concept of combining MPI with either OpenACC or OpenMP offloading.
+In this approach, calling an MPI routine from an OpenACC or OpenMP API requires updating the data in the CPU host before and after an MPI call.
+In this scenario, the data is copied back and forth between the host and device before and after each MPI call.
+In the hybrid MPI-OpenACC model, the procedure is defined by specifying the directive~\textbf{\textcolor{red}{update host()}} for copying the data from the device to the host before an MPI call; and by the directive~\textbf{\textcolor{red}{update device()}} specified after an MPI call for copying the data back to the device.
+In the hybrid MPI-OpenMP model, updating the data in the host can be done by specifying the OpenMP directives~\textbf{\textcolor{red}{update device() from()}} and~\textbf{\textcolor{red}{update device() to()}}, respectively, for copying the data from the device to the host and back to the device.
+
+
+\par
+To illustrate the concept of the hybrid MPI-OpenACC/OpenMP, List~\ref{lst:08_update_host_device_directive_acc} and List~\ref{lst:08_update_host_device_directive_omp} present code examples for an implementation and an update of host/device directives that involve the MPI functions~\textbf{\textcolor{red}{MPI\_Send()}} and~\textbf{\textcolor{red}{MPI\_Recv()}}.
+
+
+\lstinputlisting[language=fortran, firstline=5, caption={Implementation of MPI functions and update of host/device directives combining MPI with OpenACC.}, label={lst:08_update_host_device_directive_acc}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/08_update_host_device_directive_acc.f}
+
+
+\lstinputlisting[language=fortran, firstline=5, caption={Implementation of MPI functions and update of host/device directives combining MPI with OpenMP.}, label={lst:08_update_host_device_directive_omp}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/08_update_host_device_directive_omp.f}
+
+
+\par
+Despite the simplicity of implementing the hybrid MPI-OpenACC/OpenMP offloading, it suffers from a low performance caused by an explicit transfer of data between the host and the device before and after calling an MPI routine.
+This constitutes a bottleneck in GPU programming.
+To improve the performance affected by the host staging during the data transfer, one can implement the GPU-awareness MPI approach as described in the following subsection.
+
+
+% ---------------------------------------------------------------------- %
+
+
+\subsection{Hybrid MPI-OpenACC/OpenMP with GPU-awareness approach}
+
+
+\par
+The concept of the GPU-aware MPI enables an MPI library to directly access the GPU-device memory without necessarily using the CPU-host memory as an intermediate buffer~\cite{gpu_aware_mpi}.
+This offers the benefit of transferring data from one GPU to another GPU without the involvement of the CPU-host memory.
+
+
+\par
+To be specific, in the GPU-awareness approach, the device pointers point to the data allocated in the GPU memory space (data should be present in the GPU device).
+The pointers are passed as arguments to an MPI routine that is supported by the GPU memory.
+As MPI routines can directly access GPU memory, it offers the possibility of communicating between pairs of GPUs without transferring data back to the host.
+
+
+\par
+In the hybrid MPI-OpenACC model, the concept is defined by combining the directive~\textbf{\textcolor{red}{host\_data}} together with the clause~\textbf{\textcolor{red}{use\_device(list\_array)}}.
+This combination enables the access to the arrays listed in the clause~\textbf{\textcolor{red}{use\_device(list\_array)}} from the host~\cite{openacc_u_device}.
+The list of arrays, which are already present in the GPU-device memory, are directly passed to an MPI routine without a need of a staging host-memory for copying the data.
+Note that for initially copying data to GPU, we use unstructured data blocks characterized by the directives~\textbf{\textcolor{red}{enter data}} and~\textbf{\textcolor{red}{exit data}}.
+The unstructured data has the advantage of allowing to allocate and deallocate arrays within a data region.
+
+
+\par
+To illustarte the concept of the GPU-awareness MPI, we show code examples that make use of point-to-point and collective operations and the implementation of MPI functions~\textbf{\textcolor{red}{MPI\_Send()}}, \textbf{\textcolor{red}{MPI\_Recv()}} and~\textbf{\textcolor{red}{MPI\_Allreduce()}} with OpenACC and OpenMP APIs, as shown in List~\ref{lst:08_gpu_awareness_acc} and List~\ref{lst:08_gpu_awareness_omp}, respectively.
+In the first part of each code example from the 6$^{st}$ to the 15$^{th}$ line, the device pointer~\textbf{f} is passed to the MPI functions~\textbf{\textcolor{red}{MPI\_Send()}} and~\textbf{\textcolor{red}{MP\_Recv()}}.
+In the second part of each code example from 31$^{st}$ to 35$^{th}$ line, the pointer~\textbf{SumToT} is passed to the MPI function~\textbf{\textcolor{red}{MPI\_Allreduce()}}.
+Herein, the MPI operations~\textbf{\textcolor{red}{MPI\_Send()}} and~\textbf{\textcolor{red}{MPI\_Recv()}} as well as~\textbf{\textcolor{red}{MPI\_Allreduce()}} are performed between a pair of GPUs without passing through the CPU-host memory.
+In addition, the implementation of MPI functions with OpenACC and OpenMP APIs is specifically designed to support GPU-aware MPI operations.
+
+
+\lstinputlisting[language=fortran, caption={Usage of point-to-point and collective operations using GPU-awareness MPI with OpenACC.}, label={lst:08_gpu_awareness_acc}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/08_gpu_awareness_acc.f}
+
+
+\lstinputlisting[language=fortran, caption={Usage of point-to-point and collective operations using GPU-awareness MPI with OpenMP.}, label={lst:08_gpu_awareness_omp}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/08_gpu_awareness_omp.f}
+
+
+\par
+The GPU-aware MPI with OpenACC and OpenMP APIs has the capability of directly communicating between a pair of GPUs within a single node.
+However, performing the GPU-to-GPU communication across multiple nodes requires the the GPUDirect RDMA (Remote Direct Memory Access) technology~\cite{gpudirect-rdma}.
+This technology can further improve performance by reducing latency.
+
+
+% ---------------------------------------------------------------------- %
+
+
+\subsection{Compilation process}
+
+
+\par
+The compilation process of the hybrid MPI-OpenACC and MPI-OpenMP offloading is described below.
+This description is given for a Cray compiler of the wrapper~\textbf{ftn}.
+On the LUMI-G cluster, the following modules shown in List~\ref{lst:08_module_compile_command_git} may be necessary before compiling (see~\href{https://docs.lumi-supercomputer.eu/development/compiling/prgenv/}{LUMI documentation} for further details about the available programming environments).
+The commands to compile code samples on LUMI-G cluster are also listed in List~\ref{lst:08_module_compile_command_git}.
+
+
+\lstinputlisting[language=c++, firstline=4, lastline=14, caption={Modules and commands used to compile the code examples on the LUMI-G cluster.}, label={lst:08_module_compile_command_git}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/08_module_compile_command_git.pbs}
+
+
+\par
+Here, the flags~\textbf{\textcolor{brown}{-hacc}} and~\textbf{\textcolor{brown}{-homp}} enable the OpenACC and OpenMP directives in the hybrid MPI-OpenACC and MPI-OpenMP applications, respectively.
+In addition, to enable the GPU-aware support in MPICH library, one needs to set the following environment variable before running the application~\textbf{\textcolor{brown}{\$ export MPICH\_GPU\_SUPPORT\_ENABLED=1}}.
+
+
+% ---------------------------------------------------------------------- %
+
+
+\subsection{Exercises}
+
+
+\par
+We consider an MPI Fortran code that solves a 2D-Laplace equation, which is partially accelerated.
+Code examples are available in the~\textbf{\textcolor{brown}{content/examples/exercise\_multipleGPU}} subdirectory of this repository~\cite{gpu-programming-examples}.
+To access these code examples, you need to clone the repository via the commands:
+\lstinputlisting[language=c++, firstline=21, lastline=22, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/08_module_compile_command_git.pbs}
+The focus of this exercise is to complete the acceleration using either OpenACC or OpenMP API by following steps.
+
+
+\begin{itemize}
+    \item~\textbf{Exercise I}: Set a GPU device
+    \begin{itemize}
+        \item Implement OpenACC/OpenMP functions that enable assigning each MPI rank to a GPU device.
+        \item Compile and run the code on multiple GPUs.
+    \end{itemize}
+    \item~\textbf{Exercise II}: Apply traditional MPI-OpenACC/OpenMP
+    \begin{itemize}
+        \item Incoporate the OpenACC directives~\textbf{\textcolor{red}{update host()}} and~\textbf{\textcolor{red}{update device()}} before and after calling an MPI function, respectively. (\textbf{Note}: The OpenACC directive~\textbf{\textcolor{red}{update host()}} is used to transfer data from GPU to CPU within a data region, while the directive~\textbf{\textcolor{red}{update device()}} is used to transfer the data from CPU to GPU.)
+        \item Incorporate the OpenMP directives~\textbf{\textcolor{red}{update device() from()}} and~\textbf{\textcolor{red}{update device() to()}} before and after calling an MPI function, respectively. (\textbf{Note}: The OpenMP directive~\textbf{\textcolor{red}{update device() from()}} is used to transfer data from GPU to CPU within a data region, while the directive~\textbf{\textcolor{red}{update device() to()}} is used to transfer the data from CPU to GPU.)
+        \item Compile and run the code on multiple GPUs.
+    \end{itemize}
+    \item~\textbf{Exercise III}: Implement GPU-aware support
+    \begin{itemize}
+        \item Incorporate the OpenACC directive~\textbf{\textcolor{red}{host\_data use\_device()}} to pass a device pointer to an MPI function.
+        \item Incorporate the OpenMP directive~\textbf{\textcolor{red}{data use\_device\_ptr()}} to pass a device pointer to an MPI function.
+        \item Compile and run the code on multiple GPUs.
+    \end{itemize}
+    \item~\textbf{Exercise IV}: Evaluate the performance
+    \begin{itemize}
+        \item Evaluate the execution time of the accelerated codes in the Exercises II and III, and compare it with that of a pure MPI implementation.
+    \end{itemize}
+\end{itemize}
+
+
+% ---------------------------------------------------------------------- %
+
+
+\subsection{Conclusion}
+
+
+\par
+In conclusion, we have presented an overview of a GPU-hybrid programming by integrating GPU-directive models, specifically OpenACC and OpenMP APIs, with the MPI library.
+The approach adopted here allows us to utilise multiple GPU-devices not only within a single node but it extends to distributed nodes.
+In particular, we have addressed GPU-aware MPI approach, which has the advantage of enabling a direct interaction between an MPI library and a GPU-device memory.
+In other words, it permits performing MPI operations between a pair of GPUs, thus reducing the computing time caused by the data locality.
+
+
+\par
+More reading materials for MPI, OpenACC and OpenMP APIs are available at:
+\begin{itemize}
+    \item~\href{https://documentation.sigma2.no/code_development/guides/gpuaware_mpi.html}{GPU-aware MPI}
+    \item~\href{https://www.mpi-forum.org/docs/mpi-4.0/mpi40-report.pdf}{MPI documentation}
+    \item~\href{https://www.openacc.org/sites/default/files/inline-images/Specification/OpenACC-3.2-final.pdf}{OpenACC specification}
+    \item~\href{https://www.openmp.org/wp-content/uploads/OpenMP-API-Specification-5-2.pdf}{OpenMP specification}
+    \item~\href{https://docs.lumi-supercomputer.eu/development/compiling/prgenv/}{LUMI documentation}
+    \item~\href{https://documentation.sigma2.no/code_development/guides/converting_acc2omp/openacc2openmp.html}{OpenACC vs OpenMP offloading}
+    \item~\href{https://github.com/HichamAgueny/GPU-course}{OpenACC course}
+\end{itemize}
+

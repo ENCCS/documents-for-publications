@@ -1,0 +1,403 @@
+\section{Portable Kernel-Based Models}
+
+
+\par
+The goal of the cross-platform portability ecosystems is to allow the same code to run on multiple architectures, therefore reducing code duplication.
+They are usually based on C++, and use function objects/lambda functions to define the loop body ($i.e.$, the kernel), which can run on multiple architectures like CPU, GPU, and FPGA from different vendors.
+An exception to this is OpenCL, which originally offered only a C API (although currently the C++ API is available), and uses a separate-source model for the kernel code. 
+However, unlike in many conventional CUDA or HIP implementations, the portability ecosystems require kernels to be written only once if one prefers to run it on CPU and GPU for example.
+Some notable cross-platform portability ecosystems are Alpaka~\cite{alpaka}, Kokkos~\cite{kokkos}, OpenCL~\cite{OpenCL}, RAJA~\cite{raja}, and SYCL~\cite{sycl}.
+Alpaka, Kokkos and RAJA are individual projects whereas OpenCL and SYCL are standards followed by several projects implementing (and extending) them.
+For example, some notable SYCL implementations include Intel oneAPI DPC++~\cite{oneapi-dpc}, hipSYCL (also known as Open SYCL)~\cite{hipsycl}, triSYCL~\cite{trisycl}, and ComputeCPP~\cite{computecpp}.
+
+
+% ---------------------------------------------------------------------- %
+
+
+\subsection{Kokkos}
+
+
+\par
+Kokkos is an open-source performance portability ecosystem for parallelization on large heterogeneous hardware architectures of which development has mostly taken place on Sandia National Laboratories~\cite{kokkos, kokkos_sandia}.
+The project started in 2011 as a parallel C++ programming model, but have since expanded into a more broad ecosystem including Kokkos Core (the programming model), Kokkos Kernels (math library), and Kokkos Tools (debugging, profiling and tuning tools).
+By preparing proposals for the C++ standard committee, the project also aims to influence the ISO/C++ language standard such that, eventually, Kokkos capabilities will become native to the language standard.
+Here is a more detailed introduction of~\href{https://www.sandia.gov/news/publications/hpc-annual-reports/article/kokkos/}{The Kokkos EcoSystem}.
+
+
+\par
+The Kokkos library provides an abstraction layer for a variety of different parallel programming models, currently CUDA, HIP, SYCL, HPX, OpenMP, and C++ threads.
+Therefore, it allows better portability across different hardware manufactured by different vendors, but introduces an additional dependency to the software stack.
+For example, when using CUDA, only CUDA installation is required, but when using Kokkos with NVIDIA GPUs, Kokkos and CUDA installation are both required.
+Kokkos is not a very popular choice for parallel programming, and therefore, learning and using Kokkos can be more difficult compared to more established programming models such as CUDA, for which a much larger amount of search results and~\href{https://stackoverflow.com/}{Stack Overflow} discussions can be found.
+
+
+\subsubsection{Kokkos compilation}
+
+
+\par
+Furthermore, one challenge with some cross-platform portability libraries is that even on the same system, different projects may require different combinations of compilation settings for the portability library.
+For example, in Kokkos, one project may wish the default execution space to be a CUDA device, whereas another requires a CPU.
+Even if the projects prefer the same execution space, one project may desire the unified memory to be the default memory space and the other may wish to use pinned GPU memory. 
+It may be burdensome to maintain a large number of library instances on a single system.
+
+
+\par
+However, Kokkos offers a simple way to compile Kokkos library simultaneously with the user project.
+This is achieved by specifying Kokkos compilation settings~\cite{kokkos_compiling} and including the Kokkos Makefile in the user Makefile.
+\textbf{CMake} is also supported.
+This way, the user application and Kokkos library are compiled together.
+The code in List~\ref{lst:10_kokkos_hello_makefile} is an example Makefile for a single-file Kokkos project (\textbf{\textcolor{brown}{hello.cpp}} as shown in List~\ref{lst:10_kokkos_hello}) that uses CUDA (Volta architecture) as the backend (default execution space) and Unified Memory as the default memory space.
+To build this Kokkos project (\textbf{\textcolor{brown}{hello.cpp}} in List~\ref{lst:10_kokkos_hello}) with the above Makefile, no steps other than cloning the Kokkos project into the current directory is required.
+
+
+\lstinputlisting[language=bash, caption={An example Makefile for a single-file Kokkos project (\textbf{\textcolor{brown}{hello.cpp}}) shown in List~\ref{lst:10_kokkos_hello}.}, label={lst:10_kokkos_hello_makefile}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_kokkos_hello_makefile.cpp}
+
+
+\lstinputlisting[language=c++, caption={A single-file Kokkos project (\textbf{\textcolor{brown}{hello.cpp}}).}, label={lst:10_kokkos_hello}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_kokkos_hello.cpp}
+
+
+\subsubsection{Kokkos programming}
+
+
+\par
+When starting to write a project using Kokkos, the first step is understand Kokkos initialization and finalization.
+Kokkos must be initialized by calling~\textbf{\textcolor{red}{Kokkos::initialize(int argc, char * argv[])}} and finalized by calling~\textbf{\textcolor{red}{Kokkos::finalize()}}.
+More details about the~\href{https://kokkos.github.io/kokkos-core-wiki/ProgrammingGuide/Initialization.html}{Kokkos initialization} are given at the~\href{https://kokkos.github.io/kokkos-core-wiki/index.html}{Kokkos documentation}.
+
+
+\par
+Kokkos uses an execution space model to abstract the details of parallel hardware.
+The execution space instances map to the available backend options such as CUDA, OpenMP, HIP, or SYCL.
+If the execution space is not explicitly chosen by the programmer in the source code, the default execution space~\textbf{\textcolor{red}{Kokkos::DefaultExecutionSpace}} is used. 
+This is chosen when the Kokkos library is compiled.
+One should refers to the~\href{https://kokkos.github.io/kokkos-core-wiki/ProgrammingGuide/Machine-Model.html#}{Machine Model} section in the ~\href{https://kokkos.github.io/kokkos-core-wiki/index.html}{Kokkos documentation} for detailed information of the Kokkos execution space model.
+
+
+\par
+Similarly, Kokkos uses a memory space model for different types of memory, such as host memory or device memory.
+If not defined explicitly, Kokkos uses the default memory space specified during Kokkos compilation.
+The detailed description of the~\href{https://kokkos.github.io/kokkos-core-wiki/ProgrammingGuide/Machine-Model.html#kokkos-memory-spaces}{Kokkos Memory Spaces} is available at the~\href{https://kokkos.github.io/kokkos-core-wiki/index.html}{Kokkos documentation}.
+
+
+\par
+The code in List~\ref{lst:10_kokkos_hello} is an example of a single-file Kokkos program (\textbf{\textcolor{brown}{hello.cpp}}) that initializes Kokkos and prints the execution space and memory space instances.
+With Kokkos, the data can be accessed either through raw pointers or through~\textbf{Kokkos Views}.
+With raw pointers, the memory allocation into the default memory space can be done using~\textbf{\textcolor{red}{Kokkos::kokkos\_malloc(n * sizeof(int))}}.
+Kokkos Views are a data type that provides a way to access data more efficiently in memory corresponding to a certain Kokkos memory space, such as host memory or device memory. 
+A one-dimensional view of type $int *$ can be created by~\textbf{\textcolor{red}{Kokkos::View$<$int *$>$ a("a", n)}}, where $"a"$ is a label, and $n$ is the size of the allocation in the number of integers.
+Kokkos determines the optimal layout for the data at compile time for best overall performance as a function of the computer architecture.
+Furthermore, Kokkos handles the deallocation of such memory automatically.
+More details about the~\href{https://kokkos.github.io/kokkos-core-wiki/ProgrammingGuide/View.html}{Kokkos Views} are available at the~\href{https://kokkos.github.io/kokkos-core-wiki/index.html}{Kokkos documentation}.
+
+
+\par
+Finally, Kokkos provides three different parallel operations:~\textbf{\textcolor{red}{parallel\_for}},~\textbf{\textcolor{red}{parallel\_reduce}}, and~\textbf{\textcolor{red}{parallel\_scan}}.
+The~\textbf{\textcolor{red}{parallel\_for}} operation is used to execute a loop in parallel.
+The~\textbf{\textcolor{red}{parallel\_reduce}} operation is used to execute a loop in parallel and reduce the results to a single value.
+The~\textbf{\textcolor{red}{parallel\_scan}} operation implements a prefix scan.
+The usage of~\textbf{\textcolor{red}{parallel\_for}} and~\textbf{\textcolor{red}{parallel\_reduce}} are demonstrated in the examples later in this section.
+More detail about the~\href{https://kokkos.github.io/kokkos-core-wiki/ProgrammingGuide/ParallelDispatch.html}{Kokkos parallel operations} are available at the~\href{https://kokkos.github.io/kokkos-core-wiki/index.html}{Kokkos documentation}.
+
+
+\subsubsection{Kokkos running examples}
+
+
+\par
+The following simple steps (List~\ref{lst:10_kokkos_git}) should work on AMD VEGA90A device straight out of the box (needs ROCM installation).
+On NVIDIA Volta V100 device (needs CUDA installation), use the variables commented out on the Makefile.
+
+
+\lstinputlisting[language=fortran, caption={Simple commands to run the~\textbf{\textcolor{brown}{hello.cpp}} file using GPU.}, label={lst:10_kokkos_git}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_kokkos_git.pbs}
+
+
+% ---------------------------------------------------------------------- %
+
+
+\subsection{OpenCL}
+
+
+\par
+OpenCL~\cite{OpenCL} is a cross-platform, open-standard API for writing parallel programs that execute across heterogeneous platforms consisting of CPUs, GPUs, FPGAs and other devices.
+The first version of OpenCL (1.0) was released in December 2008, and the latest version of OpenCL (3.0) was released in September 2020.
+OpenCL is supported by a number of vendors, including AMD, ARM, Intel, NVIDIA, and Qualcomm.
+It is a royalty-free standard, and the OpenCL specification is maintained by the Khronos Group~\cite{khronos_group}.
+OpenCL provides a low-level programming interface initially based on C, but more recently also a C++ interface has become available.
+
+
+\subsubsection{OpenCL compilation}
+
+
+\par
+OpenCL supports two modes for compiling the programs: online and offline.
+The online compilation occurs at runtime, when the host program calls a function to compile the source code.
+The online mode allows dynamic generation and loading of kernels, but may incur some overhead due to compilation time and possible errors.
+The offline compilation occurs before runtime, when the source code of a kernel is compiled into a binary format that can be loaded by the host program.
+This mode allows faster execution and better optimization of kernels, but may limit the portability of the program, because the binary can only run on the architectures it was compiled for.
+
+
+\par
+OpenCL comes bundled with several parallel programming ecosystems, such as NVIDIA CUDA and Intel oneAPI.
+For example, after successfully installing such packages and setting up the environment, one may simply compile an OpenCL program by the commands such as~\textbf{\textcolor{brown}{icx cl\_devices.c -lOpenCL}} (Intel oneAPI) or~\textbf{\textcolor{brown}{nvcc cl\_devices.c -lOpenCL}} (NVIDIA CUDA), where~\textbf{\textcolor{brown}{cl\_devices.c}} is the compiled file.
+Unlike most other programming models, OpenCL stores kernels as text and compiles them for the device in runtime (JIT-compilation), and thus does not require any special compiler support: one can compile the code using simply~\textbf{\textcolor{brown}{gcc cl\_devices.c -lOpenCL}} (or~\textbf{\textcolor{brown}{g++}} when using C++ API), as long as the required libraries and headers are installed in a standard location.
+
+
+\par
+The AMD compiler installed on LUMI supports both OpenCL C and C++ APIs, the latter with some limitations.
+To compile a program, you can use the AMD compilers (List~\ref{lst:10_opencl_compiler_lumi})) on a GPU partition
+
+
+\lstinputlisting[language=bash, caption={The adopted AMD compilers on the LUMI GPU partition to compile a C/C++ programe using OpenCL.}, label={lst:10_opencl_compiler_lumi}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_opencl_compiler_lumi.pbs}
+
+
+\subsubsection{OpenCL programming}
+
+
+\par
+OpenCL programs consist of two parts: a host program that runs on the host device (usually a CPU) and one or more kernels that run on compute devices (such as GPUs).
+The host program is responsible for the tasks such as managing the devices for the selected platform, allocating memory objects, building and enqueueing kernels, and managing memory objects.
+
+
+\par
+The first steps when writing an OpenCL program are to initialize the OpenCL environment by selecting the platform and devices, creating a context or contexts associated with the selected device(s), and creating a command queue for each device.
+A simple example of OpenCL initialization for selecting the default device, creating a context and a queue associated with the device is shown in List~\ref{lst:10_opencl_initialization_c_api} for C and List~\ref{lst:10_opencl_initialization_cpp_api} for C++ APIs.
+
+
+\lstinputlisting[language=c, caption={A code example for C API to select the default GPU device, creating a context and a queue associated with the GPU device.}, label={lst:10_opencl_initialization_c_api}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_opencl_initialization_c_api.c}
+
+
+\lstinputlisting[language=c++, caption={A code example for C++ API to select the default GPU device, creating a context and a queue associated with the GPU device.}, label={lst:10_opencl_initialization_cpp_api}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_opencl_initialization_cpp_api.cpp}
+
+
+\par
+OpenCL provides two main programming models to manage the memory hierarchy of host and accelerator devices: buffers and shared virtual memory (SVM).
+Buffers are the traditional memory model of OpenCL, where the host and the devices have separate address spaces and the programmer has to explicitly specify the memory allocations and how and where the memory is accessed. This can be done with class \textbf{\textcolor{red}{cl::Buffer}} and functions such as \textbf{\textcolor{red}{cl::CommandQueue::enqueueReadBuffer()}}.
+Buffers are supported since early versions of OpenCL, and work well across different architectures.
+Buffers can also take advantage of device-specific memory features, such as constant or local memory.
+
+
+\par
+SVM is a newer memory model of OpenCL, introduced in version 2.0, where the host and the devices share a single virtual address space.
+Thus, the programmer can use the same pointers to access the data from host and devices simplifying the programming effort.
+In OpenCL, SVM comes in different levels such as coarse-grained buffer SVM, fine-grained buffer SVM, and fine-grained system SVM.
+All levels allow using the same pointers across a host and devices, but they differ in their granularity and synchronization requirements for the memory regions.
+Furthermore, the support for SVM is not universal across all OpenCL platforms and devices.
+For example, GPUs such as NVIDIA V100 and A100 only support the coarse-grained SVM buffer.
+This level requires explicit synchronization for memory accesses from a host and devices (using functions such as~\textbf{\textcolor{red}{cl::CommandQueue::enqueueMapSVM()}} and~\textbf{\textcolor{red}{cl::CommandQueue::enqueueUnmapSVM()}}), making the usage of SVM less convenient.
+It is further noted that this is unlike the regular Unified Memory offered by CUDA, which is closer to the fine-grained system SVM level in OpenCL.
+
+
+\par
+OpenCL uses a separate-source kernel model where the kernel code is often kept in separate files that may be compiled during runtime.
+The model allows the kernel source code to be passed as a string to the OpenCL driver after which the program object can be executed on a specific device.
+Although referred to as the separate-source kernel model, the kernels can still be defined as a string in the host program compilation units as well, which may be a more convenient approach in some cases.
+
+
+\par
+The online compilation with the separate-source kernel model has several advantages over the binary model, which requires offline compilation of kernels into device-specific binaries that can be loaded by the application at runtime.
+The online compilation preserves the portability and flexibility of OpenCL, as the same kernel source code can run on any supported device.
+Furthermore, dynamic optimization of kernels based on runtime information, such as input size, work-group size, or device capabilities, is possible.
+An example of an OpenCL kernel, defined by a string in the host compilation unit, and assigning the global thread index into a global device memory is shown in List~\ref{lst:10_opencl_kernel_example}.
+
+
+\lstinputlisting[language=c, caption={An code example of an OpenCL kernel defined by a string in host compilation unit and assigning global thread index into a global device memory.}, label={lst:10_opencl_kernel_example}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_opencl_kernel_example.cpp}
+
+
+\par
+The above kernel named~\textbf{\textcolor{red}{kernel\_dot}} and stored in the string~\textbf{\textcolor{red}{kernel\_source}} can be set to build in the host code for C (List~\ref{lst:10_opencl_kernel_build_example_c_api}) and C++ (List~\ref{lst:10_opencl_kernel_build_example_cpp_api}) APIs.
+
+
+\lstinputlisting[language=c, caption={A code example containing an OpenCL kernel (\textbf{\textcolor{red}{kernel\_dot}}) stored in the string~\textbf{\textcolor{red}{kernel\_source}} to build in the host code for C API.}, label={lst:10_opencl_kernel_build_example_c_api}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_opencl_kernel_build_example_c_api.c}
+
+
+\lstinputlisting[language=c++, caption={A code example containing an OpenCL kernel (\textbf{\textcolor{red}{kernel\_dot}}) stored in the string~\textbf{\textcolor{red}{kernel\_source}} to build in the host code for C++ API.}, label={lst:10_opencl_kernel_build_example_cpp_api}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_opencl_kernel_build_example_cpp_api.cpp}
+
+
+% ---------------------------------------------------------------------- %
+
+
+\subsection{SYCL}
+
+
+\par
+SYCL~\cite{sycl} is a royalty-free, open-standard C++ programming model for multi-device programming.
+It provides a high-level, single-source programming model for heterogeneous systems, including GPUs.
+There are several implementations of the standard.
+For GPU programming, Intel oneAPI DPC++~\cite{oneapi-dpc} and hipSYCL~\cite{hipsycl} are the most popular for desktop and HPC GPUs; ComputeCPP~\cite{computecpp} is a good choice for embedded devices.
+The same standard-compliant SYCL code should work with any implementation, but they are not binary-compatible.
+
+
+\par
+The most recent version of the SYCL standard is SYCL 2020, and it is the version we will use in this workshop.
+
+
+\subsubsection{SYCL compilation}
+
+
+\paragraph{Intel oneAPI DPC++.}
+For targeting Intel GPUs, it is enough to install the Intel oneAPI Base Toolkit~\cite{intel_oneapi_base_toolkit}. 
+Then, the compilation is as simple as shown below.
+\lstinputlisting[language=c++, firstline=5, lastline=5, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_sycl_compilation.c}
+It is also possible to use oneAPI for NVIDIA and AMD GPUs.
+In addition to the Intel oneAPI Base Toolkit, the vendor-provided runtime (CUDA or HIP) and the corresponding Codeplay oneAPI plugin~\cite{codeplay-oneapi} must be installed.
+Then, the code can be compiled using Intel LLVM compiler bundled with oneAPI, as shwon below for targeting CUDA 8.6 NVIDIA GPU and for targeting GFX90a AMD GPU.
+\lstinputlisting[language=c++, firstline=7, lastline=11, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_sycl_compilation.c}
+
+
+\paragraph{hipSYCL.}
+Using hipSYCL for NVIDIA or AMD GPUs also requires having CUDA or HIP installed first.
+Then~\textbf{syclcc} can be used for compiling the code, specifying the target devices.
+For example, one can use the command below to compile the program supporting an AMD and an NVIDIA device.
+\lstinputlisting[language=c++, firstline=20, lastline=20, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_sycl_compilation.c}
+
+
+\paragraph{Using SYCL on LUMI.}
+LUMI does not have a system-wide installation of any SYCL framework.
+For this course, an installation of hipSYCL 0.9.4 was prepared, which can be loaded via:
+\lstinputlisting[language=bash, firstline=28, lastline=31, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_sycl_compilation.c}
+The default compilation target is preset to MI250 GPUs, so to compile a single C++ file it is enough to use the command below.
+\lstinputlisting[language=bash, firstline=35, lastline=35, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_sycl_compilation.c}
+When running applications built with hipSYCL, one can often see the warning~\lq\lq [hipSYCL Warning] dag\_direct\_scheduler: Detected a requirement that is neither of discard access mode\rq\rq, reflecting the lack of an optimization hint when using buffer-accessor model.
+The warning is harmless and can be ignored.
+
+
+\subsubsection{SYCL programming}
+
+
+\par
+SYCL is, in many aspects, similar to OpenCL, but uses, like Kokkos, a single-source model with kernel lambdas.
+To submit a task to device, first a~\textbf{\textcolor{red}{sycl::queue}} must be created, which is used as a way to manage the task scheduling and execution.
+In the simplest case, that’s all the initialization one needs, as shown in the code example in List~\ref{lst:10_sycl_programming_main}.
+
+
+\lstinputlisting[language=c++, caption={A simple code example of SYCL.}, label={lst:10_sycl_programming_main}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_sycl_programming_main.cpp}
+
+
+\par
+If one wants more control, the device can be explicitly specified, or additional properties can be passed to a queue, as shown in the code example in List~\ref{lst:10_sycl_programming_queue}.
+
+
+\lstinputlisting[language=c++, caption={A simple code example of SYCL with explicitly specified device information.}, label={lst:10_sycl_programming_queue}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_sycl_programming_queue.cpp}
+
+
+\par
+For SYCL, the memory management can be done in two different ways:\textbf{buffer-accessor model} and~\textbf{unified shared memory} (USM).
+The choice of the memory management models also influences how the GPU tasks are synchronized.
+
+
+\par
+In the buffer-accessor model, a~\textbf{\textcolor{red}{sycl::buffer}} object is used to represent arrays of data. A buffer is not mapped to any single one memory space, and can be migrated between the GPU and the CPU memory transparently.
+The data in~\textbf{\textcolor{red}{sycl::buffer}} cannot be read or written directly, an accessor must be created.
+The~\textbf{\textcolor{red}{sycl::accessor}} object specifies the location of data access (host or a certain GPU kernel) and the access mode (read-only, write-only, read-write).
+Such an approach allows optimizing task scheduling by building a directed acyclic graph (DAG) of data dependencies: if kernel $A$ creates a write-only accessor to a buffer, and then kernel $B$ is submitted with a read-only accessor to the same buffer, and then a host-side read-only accessor is requested, then it can be deduced that $A$ must complete before $B$ is launched and also that the results must be copied to the host before the host task can proceed, but the host task can run in parallel with kernel $B$.
+Since the dependencies between tasks can be built automatically, by default SYCL uses~\textbf{out-of-order queues}: when two tasks are submitted to the same~\textbf{\textcolor{red}{sycl::queue}}, it is not guaranteed that the second one will launch only after the first one completes.
+When launching a kernel, accessors must be created, and the code example is shown in List~\ref{lst:10_sycl_programming_accessor}.
+
+
+\lstinputlisting[language=c++, caption={A simple code example of SYCL with accessors before launching a kernel.}, label={lst:10_sycl_programming_accessor}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_sycl_programming_accessor.cpp}
+
+
+\par
+The buffer-accessor model simplifies many aspects of heterogeneous programming and prevents many synchronization-related bugs, but it only allows very coarse control of data movement and kernel execution.
+
+
+\par
+The USM model is similar to how NVIDIA CUDA or AMD HIP manage memory.
+The programmer has to explicitly allocate the memory on the host (\textbf{\textcolor{red}{sycl::malloc\_host}}), on the device (\textbf{\textcolor{red}{sycl::malloc\_device}}), or in the shared memory space (\textbf{\textcolor{red}{sycl::malloc\_shared}} in List~\ref{lst:10_sycl_programming_malloc}).
+Despite its name, unified shared memory, and the similarity to OpenCL’s SVM, not all USM allocations are shared.
+For example, a memory allocated by\textbf{\textcolor{red}{sycl::malloc\_device}} cannot be accessed from the host.
+The allocation functions return memory pointers that can be used directly, without accessors.
+This means that the programmer have to ensure the correct synchronization between host and device tasks to avoid data races.
+With USM, it is often convenient to use~\textbf{in-order queues} with USM, instead of the default~\textbf{out-of-order queues} for the buffer-accessor model.
+More information on USM can be found in the~\href{https://registry.khronos.org/SYCL/specs/sycl-2020/html/sycl-2020.html#sec:usm}{Section 4.8 of SYCL 2020 specification}.
+
+
+\lstinputlisting[language=c++, caption={A simple code example of SYCL to create a shared (migratable) allocation of n integers in the the shared memory space using~\textbf{\textcolor{red}{sycl::malloc\_shared}}.}, label={lst:10_sycl_programming_malloc}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_sycl_programming_malloc.cpp}
+
+
+% ---------------------------------------------------------------------- %
+
+
+\subsection{Examples}
+
+
+\par
+In this subsection, we provide four sets of code examples of Kokkos, OpenCL, and SYCL for the~\textbf{Parallel for with Unified Memory}, the~\textbf{Parallel for with GPU buffers}, the~\textbf{Asynchronous parallel for kernels}, and the~\textbf{Reduction} programs.
+
+
+\subsubsection{Parallel for with Unified Memory}
+
+
+\lstinputlisting[language=c++, caption={The code example of Kokkos for the~\textbf{Parallel for with Unified Memory} program.}, label={lst:10_example_parallel_with_unified_memory_kokkos}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_example_parallel_with_unified_memory_kokkos.cpp}
+
+
+\lstinputlisting[language=c++, caption={The code example of OpenCL for the~\textbf{Parallel for with Unified Memory} program.}, label={lst:10_example_parallel_with_unified_memory_opencl}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_example_parallel_with_unified_memory_opencl.cpp}
+
+
+\lstinputlisting[language=c++, caption={The code example of SYCL for the~\textbf{Parallel for with Unified Memory} program.}, label={lst:10_example_parallel_with_unified_memory_sycl}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_example_parallel_with_unified_memory_sycl.cpp}
+
+
+\subsubsection{Parallel for with GPU buffers}
+
+
+\lstinputlisting[language=c++, caption={The code example of Kokkos for the~\textbf{Parallel for with GPU buffers} program.}, label={lst:10_example_parallel_with_gpu_buffers_kokkos}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_example_parallel_with_gpu_buffers_kokkos.cpp}
+
+
+\lstinputlisting[language=c++, caption={The code example of OpenCL for the~\textbf{Parallel for with GPU buffers} program.}, label={lst:10_example_parallel_with_gpu_buffers_opencl}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_example_parallel_with_gpu_buffers_opencl.cpp}
+
+
+\lstinputlisting[language=c++, caption={The code example of SYCL for the~\textbf{Parallel for with GPU buffers} program.}, label={lst:10_example_parallel_with_gpu_buffers_sycl}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_example_parallel_with_gpu_buffers_sycl.cpp}
+
+
+\subsubsection{Asynchronous parallel for kernels}
+
+
+\lstinputlisting[language=c++, caption={The code example of Kokkos for the~\textbf{Asynchronous parallel for kernels} program.}, label={lst:10_example_asynchronous_parallel_for_kernels_kokkos}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_example_asynchronous_parallel_for_kernels_kokkos.cpp}
+
+
+\lstinputlisting[language=c++, caption={The code example of OpenCL for the~\textbf{Asynchronous parallel for kernels} program.}, label={lst:10_example_asynchronous_parallel_for_kernels_opencl}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_example_asynchronous_parallel_for_kernels_opencl.cpp}
+
+
+\lstinputlisting[language=c++, caption={The code example of SYCL for the~\textbf{Asynchronous parallel for kernels} program.}, label={lst:10_example_asynchronous_parallel_for_kernels_sycl}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_example_asynchronous_parallel_for_kernels_sycl.cpp}
+
+
+\subsubsection{Reduction}
+
+
+\lstinputlisting[language=c++, caption={The code example of Kokkos for the~\textbf{Reduction} program.}, label={lst:10_example_reduction_kokkos}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_example_reduction_kokkos.cpp}
+
+
+\lstinputlisting[language=c++, caption={The code example of OpenCL for the~\textbf{Reduction} program.}, label={lst:10_example_reduction_opencl}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_example_reduction_opencl.cpp}
+
+
+\lstinputlisting[language=c++, caption={The code example of SYCL for the~\textbf{Reduction} program.}, label={lst:10_example_reduction_sycl}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/10_example_reduction_sycl.cpp}
+
+
+% ---------------------------------------------------------------------- %
+
+
+\subsection{Pros and cons of cross-platform portability ecosystems}
+
+\begin{itemize}
+    \item~\textbf{General observations}
+    \begin{itemize}
+        \item The amount of code duplication is minimized
+        \item The same code can be compiled to multiple architectures from different vendors
+        \item Limited learning resources compared to CUDA (Stack Overflow, course material, documentation)
+    \end{itemize}
+    \item~\textbf{Lambda-based kernel models (Kokkos, SYCL)}
+    \begin{itemize}
+        \item Higher level of abstraction
+        \item Less knowledge of the underlying architecture is needed for initial porting
+        \item Very nice and readable source code (C++ API)
+        \item The models are relatively new and not very popular yet
+    \end{itemize}
+    \item~\textbf{Separate-source kernel models (OpenCL)}
+    \begin{itemize}
+        \item Very good portability
+        \item Mature ecosystem
+        \item Low-level API gives more control and allows fine tuning
+        \item Both C and C++ APIs available (C++ API is less well supported)
+        \item The low-level API and separate-source kernel model are less user friendly
+    \end{itemize}
+\end{itemize}
+
