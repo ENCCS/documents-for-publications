@@ -1,0 +1,178 @@
+\RequirePackage{lineno}
+\documentclass[article, a4paper, 11pt, amsmath, amssymb]{revtex4-1}
+\usepackage[dvips]{graphicx}
+\usepackage{threeparttable}
+\usepackage[yyyymmdd,hhmmss]{datetime}
+
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+}
+
+
+\usepackage{subfigure}
+% \usepackage{subcaption}
+\usepackage{indentfirst}
+\usepackage{color}
+\usepackage{rotating}
+\usepackage{footmisc}
+
+
+% \usepackage{listings}
+%\lstset{basicstyle=\footnotesize\ttfamily, breaklines=true, frame=bottomline, escapechar=|}
+% styles for code
+%\usepackage[charsperline=90]{sty_file/jlcode}
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{ylw_style}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize\linespread{1.0}\selectfont,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=4
+}
+\lstset{style=ylw_style}
+
+
+\pagestyle{plain}
+\bibliographystyle{apsrev}
+\DeclareGraphicsExtensions{.eps, .mps, .pdf, .jpg, .png}
+
+\begin{document}
+\setpagewiselinenumbers
+\modulolinenumbers[5]
+
+
+% -------------------------------------------------------------------- %
+
+\begin{titlepage}
+    \begin{center}
+        \vspace*{1cm}
+            
+        \Huge
+        \textbf{\LARGE{GPU Programming: When, Why and How?}}\\
+        \vspace{0.0cm}
+        \textbf{\Large{--- --- A Best Practice Guide}}
+
+        \vspace{0.3cm}
+            
+        \textrm{\large{AAA~$^{1}$, BBB~$^{2}$, CCC~$^{3}$, DDD~$^{4}$, EEE~$^{5}$}}\\
+        \vspace{1.0cm}
+        $^1$ 111\\
+        $^2$ 222\\
+        $^3$ 333\\
+        $^4$ 444\\
+        $^5$ 555
+     
+        \vspace{2.0cm}
+            
+        \includegraphics[height=5cm]{fig_logo_history/eurocc.png}
+        %\hspace{0.8cm}
+        %\includegraphics[height=5cm]{fig_logo_history/enccs.png}
+            
+    \end{center}
+\end{titlepage}
+
+
+\begin{abstract}
+\textbf{\LARGE{Rules to highlight keywords in this paper}}:
+\begin{itemize}
+    \item The $Italicized$-$text$ is used to highlight variables from code examples, such as the variables $threadIdx.x$, $threadIdx.y$, and $threadIdx.z$ from code examples.
+    \item The~\textbf{black bold} font for normal keywords where we want to highlight them, for example,~\textbf{CUDA/oneAPI/MPI/SYCL}.
+    \item The~\textbf{\textcolor{red}{red bold}} font for important keywords, directives, build-in kernels, and some statements in programming languages, like \textbf{\textcolor{red}{threadIdx.x/numpy/@vectorize}}.
+    \item The~\textbf{\textcolor{brown}{brown bold}} font for directories, names for files, and flags for compilation. Here are several examples.
+        \begin{itemize}
+            \item \textbf{\textcolor{brown}{-arch=sm\_XY}}
+            \item \textbf{\textcolor{brown}{content/examples/cuda-hip}} directory
+            \item \textbf{\textcolor{brown}{CUDA.jl}} for NVIDIA GPUs
+            \item \textbf{\textcolor{brown}{\$ export MPICH\_GPU\_SUPPORT\_ENABLED=1}}
+            \item \textbf{\textcolor{brown}{cuda\_runtime.h}} and~\textbf{\textcolor{brown}{cuda.h}} for CUDA
+        \end{itemize}
+\end{itemize}
+\end{abstract}
+
+
+\maketitle
+
+
+% -------------------------------------------------------------------- %
+\clearpage
+\tableofcontents
+%\lstlistoflistings
+
+
+% -------------------------------------------------------------------- %
+\clearpage
+\linenumbers
+
+
+\include{01_history}
+\include{02_ecosystem}
+\include{03_problem}
+\include{04_concept}
+\include{05_intro_programming_model}
+\include{06_language_support}
+\include{07_directive_based_models}
+\include{08_multiple_GPUs}
+\include{09_nonportable_kernel_models}
+\include{10_portable_kernel_models}
+\include{11_gpu_porting}
+\include{12_recommendations}
+\include{13_examples}
+
+
+% -------------------------------------------------------------------- %
+\clearpage
+\section{Concluding Remarks and Outlook}
+
+
+\par
+Computer simulations
+
+
+% -------------------------------------------------------------------- %
+
+
+\section*{Acknowledgment}
+
+We thank.
+
+
+\section*{Note}
+
+The authors declare no conflict of interest.
+
+
+\section*{Data Availability Statement}
+
+The research data.
+
+
+% -------------------------------------------------------------------- %
+
+\bibliography{gpu_programming_white_paper}
+
+
+\end{document}
+%{\centering{\textcolor{red}{\bf{\Huge WYL @ \today~\currenttime}}}}\\
