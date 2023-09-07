@@ -16,6 +16,12 @@
 }
 
 
+% format for abbreviations
+\usepackage{enumitem}
+\newlist{abbrv}{itemize}{1}
+\setlist[abbrv,1]{label=,labelwidth=1in,align=parleft,itemsep=0.1\baselineskip,leftmargin=!}
+
+
 \usepackage{subfigure}
 % \usepackage{subcaption}
 \usepackage{indentfirst}
@@ -145,34 +151,14 @@
 
 % -------------------------------------------------------------------- %
 \clearpage
-\section{Concluding Remarks and Outlook}
-
-
-\par
-Computer simulations
+\include{14_abbreviations.tex}
 
 
 % -------------------------------------------------------------------- %
+\clearpage
+\section*{Further Documentation}
 
-
-\section*{Acknowledgment}
-
-We thank.
-
-
-\section*{Note}
-
-The authors declare no conflict of interest.
-
-
-\section*{Data Availability Statement}
-
-The research data.
-
-
-% -------------------------------------------------------------------- %
-
-\bibliography{gpu_programming_white_paper}
+\bibliography{gpu_programming_bpg}
 
 
 \end{document}
