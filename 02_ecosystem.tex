@@ -177,8 +177,7 @@ This approach promotes code reusability, productivity, and performance portabili
 \par
 The core of suite is~\textbf{Intel oneAPI Base Toolkit}, a set of tools and libraries for developing high-performance, data-centric applications across diverse architectures.
 It features an industry-leading C++ compiler that implements SYCL, an evolution of C++ for heterogeneous computing.
-It includes the Collective Communications Library, the Data Analytics Library, the Deep Neural Networks Library, the Math Kernel Library, the Video Processing Library, the DPC++/C++ Compiler, the DPC++ Library, the DPC++ Compatibility Tool, the Intel Distribution for Python, the Threading Building Blocks, the debugging tool Intel Distribution for GDB, the performance analisis tools Intel Adviser and Intel Vtune Profiler, the Integrated Performance Primitives,
-the FPGA Add-on for oneAPI Base Toolkit, $etc$.
+It includes the Collective Communications Library, the Data Analytics Library, the Deep Neural Networks Library, the Math Kernel Library, the Video Processing Library, the DPC++/C++ Compiler, the DPC++ Library, the DPC++ Compatibility Tool, the Intel Distribution for Python, the Threading Building Blocks, the debugging tool Intel Distribution for GDB, the performance analisis tools Intel Adviser and Intel Vtune Profiler, the Integrated Performance Primitives, the FPGA Add-on for oneAPI Base Toolkit, $etc$.
 This can be complemented with additional toolkits.
 The~\textbf{Intel oneAPI HPC Toolkit} contains DPC++/C++ Compiler, Fortran and C++ Compiler Classic, debugging tools Cluster Checker and Inspector, the Intel MPI Library, and the performance analysis tool Intel Trace Analyzer and Collector.
 
@@ -209,9 +208,9 @@ A short list of terminology for different GPU hardware is listed in Table~\ref{t
 \textbf{NVIDIA} & \textbf{AMD} & \textbf{Intel} \\
 \hline
 streaming processor/streaming core & SIMD lane & processing element \\
-SIMT unit & SIMD unit & Vector engine (XVE) \\
-Streaming Multiprocessor (SM) & Computing Unit (CU) & Xe-core/Execution unit (EU) \\
-GPU processing clusters (GPC) & Compute Engine & Xe-slice \\
+SIMT unit & SIMD unit & Vector engine \\
+Streaming Multi-Processor (SMP) & Computing Unit (CU) & Xe-core/Execution Unit (EU) \\
+GPU processing clusters & Compute Engine & Xe-slice \\
 \hline
 \end{tabular}
 \end{table}

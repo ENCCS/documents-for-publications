@@ -297,7 +297,7 @@ In addition, because of the more explicit programming approach, SYCL GPU port is
 
 
 \par
-As mentioned in previous subsections, the~\textbf{Numba} package allows developers to just-in-time (\textbf{JIT}) compile Python code to run fast on CPUs, but can also be used for JIT compiling for GPUs (although AMD GPU support is at the moment deprecated for Numba versions $>$ 0.53).
+As mentioned in previous subsections, the~\textbf{Numba} package allows developers to \textbf{JIT} compile Python code to run fast on CPUs, but can also be used for JIT compiling for GPUs (although AMD GPU support is at the moment deprecated for Numba versions $>$ 0.53).
 JIT seems to work well on loop-based, computationally heavy functions, so trying it out is a nice choice for initial source version.
 The code examples for the stencil update scheme and the data generation function are provided in List~\ref{lst:13_heat_diffusion_stencil_gpu_python_jit_stencil_update} and List~\ref{lst:13_heat_diffusion_stencil_gpu_python_jit_data_generation}, respectively.
 

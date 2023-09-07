@@ -212,7 +212,7 @@ Before looking how it is done in practice, we first revisit some basic concepts 
 
 
 \par
-GPUs are comprised many light cores, the so-called Streaming Processors (SP) in CUDA, which are physically group together in units, $i.e.$,~\textbf{Streaming Multi-Processors} (SMP) in CUDA architecture (note that in AMD the equivalent is called~\textbf{Computing Units}, while in Intel GPUs they are~\textbf{Execution Units}).
+GPUs are comprised many light cores, the so-called Streaming Processors (SP) in CUDA, which are physically group together in units, $i.e.$,~\textbf{SMP} in CUDA architecture (note that in AMD the equivalent is called~\textbf{CUs} (Computing Units), while in Intel GPUs they are~\textbf{EUs} (Execution Units)).
 The work is done on GPUs by launching many~\textbf{threads} each executing an instance of the same~\textbf{kernel}.
 The order of execution is not defined, and the threads can only exchange information in specific conditions.
 Because of the way the SPs are grouped, and the threads are also grouped in~\textbf{blocks}.
@@ -243,7 +243,7 @@ It is possible to avoid extra reads from the memory when several threads in the 
 \par
 A short summary of the memory and execution.
 \begin{itemize}
-    \item GPUs consist of streaming processors (SPs) grouped together in units, such as streaming multi-processors (SMPs) in CUDA architecture.
+    \item GPUs consist of SPs grouped together in units, such as SMPs in CUDA architecture.
     \item Work on GPUs is done by launching threads, with each thread executing an instance of the same kernel, and the execution order is not defined.
     \item Threads are organized into blocks, assigned to an SMP, and cannot be split, and there is no communication between threads in different blocks.
     \item Each SMP contains shared memory, which acts as a user-controlled cache for threads within a block, allowing efficient data sharing and synchronization.
