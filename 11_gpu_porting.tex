@@ -78,9 +78,9 @@ Below we list the basic steps to run~\textbf{hipify-perl} on LUMI-G.
     \item Step 1: Generating~\textbf{hipify-perl} script
     \lstinputlisting[language=bash, firstline=4, lastline=5, label={lst:11_hipify_perl_clang_exercise_lumig}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
     \item Step 2: Running the generated~\textbf{hipify-perl}
-    \lstinputlisting[language=bash, firstline=7, lastline=7, label={lst:11_hipify_perl_clang_exercise_lumig}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
+    \lstinputlisting[language=bash, firstline=7, lastline=7, label={lst:11_hipify_perl_clang_exercise_lumig1}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
     \item Step 3: Compiling with~\textbf{hipcc} the generated HIP code
-    \lstinputlisting[language=bash, firstline=9, lastline=9, label={lst:11_hipify_perl_clang_exercise_lumig}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
+    \lstinputlisting[language=bash, firstline=9, lastline=9, label={lst:11_hipify_perl_clang_exercise_lumig2}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
 \end{itemize}
 
 
@@ -110,13 +110,13 @@ Herein we present a step-by-step guide for running~\textbf{hipify-clang}.
 
 \begin{itemize}
     \item Step 1: Pulling a CUDA singularity container
-    \lstinputlisting[language=bash, firstline=15, lastline=15, label={lst:11_hipify_perl_clang_exercise_lumig}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
+    \lstinputlisting[language=bash, firstline=15, lastline=15, label={lst:11_hipify_perl_clang_exercise_lumig3}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
     \item Step 2: Loading a rocm module and launching the CUDA singularity using the commands below, where the current directory~\textbf{\textcolor{brown}{\$PWD}} in the host is mounted to that of the container, and the directory~\textbf{\textcolor{brown}{/opt}} in the host is mounted to the that inside the container.
-    \lstinputlisting[language=bash, firstline=17, lastline=18, label={lst:11_hipify_perl_clang_exercise_lumig}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
+    \lstinputlisting[language=bash, firstline=17, lastline=18, label={lst:11_hipify_perl_clang_exercise_lumig4}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
     \item Step 3: Setting the environment variable~\textbf{\textcolor{brown}{\$PATH}}. In order to run~\textbf{hipify-clang} from inside the container, one can set the environment variable~\textbf{\textcolor{brown}{\$PATH}} that defines the path to look for the binary~\textbf{hipify-clang}. Note that the rocm version we used is~\textbf{rocm-5.2.3}.
-    \lstinputlisting[language=bash, firstline=20, lastline=20, label={lst:11_hipify_perl_clang_exercise_lumig}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
+    \lstinputlisting[language=bash, firstline=20, lastline=20, label={lst:11_hipify_perl_clang_exercise_lumig5}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
     \item Step 4: Running~\textbf{hipify-clang} from inside the singularity container. Here the cuda path and the path to the~\textbf{\textcolor{red}{*includes*}} and~\textbf{\textcolor{red}{*defines*}} files should be specified. The CUDA source code and the generated output code are~\textbf{program.cu} and~\textbf{hip\_program.cu.hip}, respectively. The syntax for the compilation process of the generated hip code is similar to the one described in the~\textbf{hipify-perl} section.
-    \lstinputlisting[language=bash, firstline=22, lastline=22, label={lst:11_hipify_perl_clang_exercise_lumig}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
+    \lstinputlisting[language=bash, firstline=22, lastline=22, label={lst:11_hipify_perl_clang_exercise_lumig6}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
 \end{itemize}
 
 
@@ -124,7 +124,7 @@ Herein we present a step-by-step guide for running~\textbf{hipify-clang}.
 Code examples for the~\textbf{hipify} exercises can be accessed in the~\textbf{\textcolor{brown}{content/examples/exercise\_hipify}} subdirectory by cloning this repository.
 
 
-\lstinputlisting[language=bash, firstline=28, lastline=29, label={lst:11_hipify_perl_clang_exercise_lumig}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
+\lstinputlisting[language=bash, firstline=28, lastline=29, label={lst:11_hipify_perl_clang_exercise_lumig7}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
 
 
 \par
@@ -160,17 +160,17 @@ In the following part, we present a step-by-step guide for building and using~\t
     \item Step 1: Building and installing~\textbf{clacc}.
     \lstinputlisting[language=bash, firstline=4, lastline=16, label={lst:11_clacc_exercise_lumig}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_clacc_exercise_lumig.pbs}
     \item Step 2: Setting up environment variables to be able to work from the~\textbf{\textcolor{brown}{/install}} directory, which is the simplest way. We assume that the~\textbf{\textcolor{brown}{/install}} directory is located in the path~\textbf{\textcolor{brown}{/project/project\_xxxxxx/Clacc/llvm-project}}. For more advanced usage of~\textbf{clacc}, we refer readers to the~\href{https://github.com/llvm-doe-org/llvm-project/blob/clacc/main/README.md}{Usage from Build directory}.
-    \lstinputlisting[language=bash, firstline=23, lastline=24, label={lst:11_clacc_exercise_lumig}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_clacc_exercise_lumig.pbs}
+    \lstinputlisting[language=bash, firstline=23, lastline=24, label={lst:11_clacc_exercise_lumig1}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_clacc_exercise_lumig.pbs}
     \item Step 3: Source to source conversion of the~\textbf{\textcolor{brown}{openACC\_code.c}} code to be printed out to the file~\textbf{\textcolor{brown}{openMP\_code.c}}. Here the flag~\textbf{\textcolor{brown}{-fopenacc-structured-ref-count-omp=no-ompx-hold}} is introduced to disable the~\textbf{\textcolor{brown}{ompx\_hold}} map type modifier, which is used by the OpenACC copy clause translation. The~\textbf{\textcolor{brown}{ompx\_hold}} is an OpenMP extension that might not be supported yet by other compilers.
-    \lstinputlisting[language=bash, firstline=31, lastline=31, label={lst:11_clacc_exercise_lumig}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_clacc_exercise_lumig.pbs}
+    \lstinputlisting[language=bash, firstline=31, lastline=31, label={lst:11_clacc_exercise_lumig2}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_clacc_exercise_lumig.pbs}
     \item Step 4: Compiling the code with the~\href{https://docs.lumi-supercomputer.eu/development/compiling/prgenv/}{cc compiler wrapper}.
-    \lstinputlisting[language=bash, firstline=38, lastline=43, label={lst:11_clacc_exercise_lumig}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_clacc_exercise_lumig.pbs}
+    \lstinputlisting[language=bash, firstline=38, lastline=43, label={lst:11_clacc_exercise_lumig3}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_clacc_exercise_lumig.pbs}
 \end{itemize}
 
 
 \par
 Code examples for the~\textbf{clacc} exercise can be accessed in the~\textbf{\textcolor{brown}{content/examples/exercise\_clacc}} subdirectory by cloning this repository.
-\lstinputlisting[language=bash, firstline=50, lastline=51, label={lst:11_clacc_exercise_lumig}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_clacc_exercise_lumig.pbs}
+\lstinputlisting[language=bash, firstline=50, lastline=51, label={lst:11_clacc_exercise_lumig4}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_clacc_exercise_lumig.pbs}
 
 
 \par
