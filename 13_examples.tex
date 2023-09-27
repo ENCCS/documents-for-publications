@@ -1,4 +1,4 @@
-\section{An GPU Programming Example: Stencil Computation}\ref{sec:stencil_example}
+\section{An GPU Programming Example: Stencil Computation}\label{sec:stencil_example}
 
 
 \subsection{Problem: Heat flow in two-dimensional area}
@@ -133,18 +133,18 @@ Executable files for the OpenMP-enabled variants are provided together with the 
 \lstinputlisting[language=bash, firstline=1, lastline=6, label={13_heat_diffusion_stencil_cpu_openmp_lumi}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_cpu_openmp_lumi.cpp}
 
 Afterwards login into an interactive node and test the executables.
-\lstinputlisting[language=bash, firstline=14, lastline=20, label={13_heat_diffusion_stencil_cpu_openmp_lumi}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_cpu_openmp_lumi.cpp}
+\lstinputlisting[language=bash, firstline=14, lastline=20, label={13_heat_diffusion_stencil_cpu_openmp_lumi1}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_cpu_openmp_lumi.cpp}
 
 If everything works well, the output should look similar to this:
-\lstinputlisting[language=bash, firstline=28, lastline=44, label={13_heat_diffusion_stencil_cpu_openmp_lumi}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_cpu_openmp_lumi.cpp}
+\lstinputlisting[language=bash, firstline=28, lastline=44, label={13_heat_diffusion_stencil_cpu_openmp_lumi2}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_cpu_openmp_lumi.cpp}
 
 
 \par
 Changing number of default OpenMP threads is somewhat tricky to do interactively, so OpenMP-CPU~\lq\lq scaling\rq\rq~tests are done via provided batch script (using~\textbf{\textcolor{brown}{squeue --me}} to make sure that there is no currently running interactive allocation.
-\lstinputlisting[language=bash, firstline=52, lastline=58, label={13_heat_diffusion_stencil_cpu_openmp_lumi}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_cpu_openmp_lumi.cpp}
+\lstinputlisting[language=bash, firstline=52, lastline=58, label={13_heat_diffusion_stencil_cpu_openmp_lumi3}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_cpu_openmp_lumi.cpp}
 
 The expected output is:
-\lstinputlisting[language=bash, firstline=66, lastline=72, label={13_heat_diffusion_stencil_cpu_openmp_lumi}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_cpu_openmp_lumi.cpp}
+\lstinputlisting[language=bash, firstline=66, lastline=72, label={13_heat_diffusion_stencil_cpu_openmp_lumi4}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_cpu_openmp_lumi.cpp}
 
 
 \subsubsection{Timing CPU parallelization}
@@ -215,13 +215,13 @@ Changes of stencil update code shown in List~\ref{lst:13_heat_diffusion_stencil_
 \par
 As SYCL is placed on top of ROCm/HIP (or CUDA) software stack, even running SYCL executables may require respective modules to be loaded.
 On the LUMI-G nodes, it can be done as follows.
-\lstinputlisting[language=bash, firstline=10, lastline=16, label={lst:13_heat_diffusion_stencil_path}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_path.pbs}
+\lstinputlisting[language=bash, firstline=10, lastline=16, label={lst:13_heat_diffusion_stencil_path1}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_path.pbs}
 
 
 \par
 As described in previous sections, you can generate your own executables.
 This time we will use the interactive allocation for GPU computing.
-\lstinputlisting[language=bash, firstline=24, lastline=31, label={lst:13_heat_diffusion_stencil_path}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_path.pbs}
+\lstinputlisting[language=bash, firstline=24, lastline=31, label={lst:13_heat_diffusion_stencil_path2}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_path.pbs}
 
 
 \par
@@ -312,7 +312,7 @@ The code examples for the stencil update scheme and the data generation function
 The alternative approach would be to rewrite stencil update code in NumPy style, exploiting loop vectorization.
 You can try to run the provided Python examples using the Google Colab with instructions provided in the~\href{https://enccs.github.io/gpu-programming/0-setup/#running-on-google-colab}{Setup} on your local machine or LUMI node (non-GPU variants).
 On LUMI, you can set up Python distribution as following:
-\lstinputlisting[language=bash, firstline=40, lastline=47, label={lst:13_heat_diffusion_stencil_path}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_path.pbs}
+\lstinputlisting[language=bash, firstline=40, lastline=47, label={lst:13_heat_diffusion_stencil_path3}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_path.pbs}
 
 
 \par
@@ -392,12 +392,12 @@ The source files are also available in the~\textbf{\textcolor{brown}{content/exa
 
 \par
 To run the example on the LUMI CPU partition, you should the following commands:
-\lstinputlisting[language=bash, firstline=57, lastline=69, label={lst:13_heat_diffusion_stencil_path}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_path.pbs}
+\lstinputlisting[language=bash, firstline=57, lastline=69, label={lst:13_heat_diffusion_stencil_path4}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_path.pbs}
 
 
 \par
 To run the example on the LUMI GPU partition, use instead the command below:
-\lstinputlisting[language=bash, firstline=78, lastline=78, label={lst:13_heat_diffusion_stencil_path}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_path.pbs}
+\lstinputlisting[language=bash, firstline=78, lastline=78, label={lst:13_heat_diffusion_stencil_path5}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/13_heat_diffusion_stencil_path.pbs}
 
 
 \par
