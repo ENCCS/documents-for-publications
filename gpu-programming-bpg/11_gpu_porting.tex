@@ -127,25 +127,6 @@ Code examples for the~\textbf{hipify} exercises can be accessed in the~\textbf{\
 \lstinputlisting[language=bash, firstline=28, lastline=29, label={lst:11_hipify_perl_clang_exercise_lumig7}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_hipify_perl_clang_exercise_lumig.pbs}
 
 
-\par
-Following the steps mentioned above, there are exercises to translate and CUDA to HIP code using~\textbf{hipify-perl} and~\textbf{hipify-clang}.
-
-
-\begin{itemize}
-    \item Exercise I : Translate an CUDA code to HIP with~\textbf{hipify-perl}
-    \begin{itemize}
-        \item 1.1 Generate the~\textbf{hipify-perl} tool.
-        \item 1.2 Convert the CUCA code~\textbf{\textcolor{brown}{vec\_add\_cuda.cu}} located in~\textbf{\textcolor{brown}{/exercise\_hipify/Hipify\_perl}} with the~\textbf{Hipify-perl} tool to HIP.
-        \item 1.3 Compile the generated HIP code with the~\textbf{hipcc} compiler wrapper and run it.
-    \end{itemize}
-    \item Exercise II : Translate an CUDA code to HIP with~\textbf{hipify-clang}
-    \begin{itemize}
-        \item 2.1 Convert the CUCA code~\textbf{\textcolor{brown}{vec\_add\_cuda.cu}} located in~\textbf{\textcolor{brown}{/exercise\_hipify/Hipify\_clang}} with the~\textbf{hipify-clang} tool to HIP.
-        \item 2.2 Compile the generated HIP code with the~\textbf{hipcc} compiler wrapper and run it.
-    \end{itemize}
-\end{itemize}
-
-
 \subsubsection{Translating OpenACC to OpenMP with Clacc}
 
 
@@ -171,14 +152,6 @@ In the following part, we present a step-by-step guide for building and using~\t
 \par
 Code examples for the~\textbf{clacc} exercise can be accessed in the~\textbf{\textcolor{brown}{content/examples/exercise\_clacc}} subdirectory by cloning this repository.
 \lstinputlisting[language=bash, firstline=50, lastline=51, label={lst:11_clacc_exercise_lumig4}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/11_clacc_exercise_lumig.pbs}
-
-
-\par
-Here is an additional exercise to translate an OpenACC code to OpenMP.
-\begin{itemize}
-    \item Convert the OpenACC code~\textbf{\textcolor{brown}{openACC\_code.c}} located in~\textbf{\textcolor{brown}{/exercise\_clacc}} with the~\textbf{clacc} compiler.
-    \item Compile the generated OpenMP code with the~\textbf{cc} compiler wrapper and run it.
-\end{itemize}
 
 
 \subsubsection{Translating CUDA to SYCL/DPC++ with SYCLomatic}
