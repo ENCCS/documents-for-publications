@@ -158,45 +158,6 @@ In addition, to enable the GPU-aware support in MPICH library, one needs to set 
 % ---------------------------------------------------------------------- %
 
 
-\subsection{Exercises}
-
-
-\par
-We consider an MPI Fortran code that solves a 2D-Laplace equation, which is partially accelerated.
-Code examples are available in the~\textbf{\textcolor{brown}{content/examples/exercise\_multipleGPU}} subdirectory of this repository~\cite{gpu-programming-examples}.
-To access these code examples, you need to clone the repository via the commands:
-\lstinputlisting[language=c++, firstline=21, lastline=22, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/08_module_compile_command_git.pbs}
-The focus of this exercise is to complete the acceleration using either OpenACC or OpenMP API by following steps.
-
-
-\begin{itemize}
-    \item~\textbf{Exercise I}: Set a GPU device
-    \begin{itemize}
-        \item Implement OpenACC/OpenMP functions that enable assigning each MPI rank to a GPU device.
-        \item Compile and run the code on multiple GPUs.
-    \end{itemize}
-    \item~\textbf{Exercise II}: Apply traditional MPI-OpenACC/OpenMP
-    \begin{itemize}
-        \item Incoporate the OpenACC directives~\textbf{\textcolor{red}{update host()}} and~\textbf{\textcolor{red}{update device()}} before and after calling an MPI function, respectively. (\textbf{Note}: The OpenACC directive~\textbf{\textcolor{red}{update host()}} is used to transfer data from GPU to CPU within a data region, while the directive~\textbf{\textcolor{red}{update device()}} is used to transfer the data from CPU to GPU.)
-        \item Incorporate the OpenMP directives~\textbf{\textcolor{red}{update device() from()}} and~\textbf{\textcolor{red}{update device() to()}} before and after calling an MPI function, respectively. (\textbf{Note}: The OpenMP directive~\textbf{\textcolor{red}{update device() from()}} is used to transfer data from GPU to CPU within a data region, while the directive~\textbf{\textcolor{red}{update device() to()}} is used to transfer the data from CPU to GPU.)
-        \item Compile and run the code on multiple GPUs.
-    \end{itemize}
-    \item~\textbf{Exercise III}: Implement GPU-aware support
-    \begin{itemize}
-        \item Incorporate the OpenACC directive~\textbf{\textcolor{red}{host\_data use\_device()}} to pass a device pointer to an MPI function.
-        \item Incorporate the OpenMP directive~\textbf{\textcolor{red}{data use\_device\_ptr()}} to pass a device pointer to an MPI function.
-        \item Compile and run the code on multiple GPUs.
-    \end{itemize}
-    \item~\textbf{Exercise IV}: Evaluate the performance
-    \begin{itemize}
-        \item Evaluate the execution time of the accelerated codes in the Exercises II and III, and compare it with that of a pure MPI implementation.
-    \end{itemize}
-\end{itemize}
-
-
-% ---------------------------------------------------------------------- %
-
-
 \subsection{Conclusion}
 
 
