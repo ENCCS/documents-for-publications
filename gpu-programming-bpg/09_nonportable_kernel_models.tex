@@ -71,18 +71,6 @@ These functions allow us to determine the total number of GPUs and the index of 
 In the code examples, we default to use device 0.
 
 
-\par
-As an exercise, modify the~\lq\rq Hello World\rq\rq~code to explicitly use a specific GPU.
-We can do this by using the~\textbf{\textcolor{red}{$<$cuda/hip$>$SetDevice}} function, which allows us to set the desired GPU device.
-Note that the device number provided has to be within the range of available devices, otherwise, the program may fail to run or produce unexpected results.
-To experiment with different GPUs, modify the code to include the following line before retrieving device information:~\textbf{\textcolor{red}{cudaSetDevice(deviceNumber)}} for CUDA and~\textbf{\textcolor{red}{hipSetDevice(deviceNumber)}} for HIP, respectively.
-
-
-\par
-Replace $deviceNumber$ with the desired GPU device index.
-Run the code examples with different device numbers to observe the output (more examples for the~\lq\lq Hello World\rq\rq~program are available in the~\textbf{\textcolor{brown}{content/examples/cuda-hip}} subdirectory of this lesson repository~\cite{gpu-programming-examples}).
-
-
 \subsubsection{Vector Addition}\label{sec:vector_addition}
 
 
