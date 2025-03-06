@@ -52,7 +52,7 @@ NEED INPUT
 
 machine learning
 
-## Please specify how does your project ensure ethical principles and addresses potential societal impacts associated with the development and deployment of AI technologies: Not sure
+## Please specify how does your project ensure ethical principles and addresses potential societal impacts associated with the development and deployment of AI technologies
 NEED INPUT
 
 # Submission details
