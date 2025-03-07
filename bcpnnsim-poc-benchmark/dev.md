@@ -22,7 +22,7 @@ as a versatile tool for applications from associative memory modeling to advance
 
 ## Explain the scientific case of the project for which you intend to use the code(s):
 
-NEED INPUT
+NEED INPUT (~50-150 words)
 
 ## Keywords:
 
@@ -53,7 +53,10 @@ NEED INPUT
 machine learning
 
 ## Please specify how does your project ensure ethical principles and addresses potential societal impacts associated with the development and deployment of AI technologies
-NEED INPUT
+We recognize that developing AI comes with significant responsibilities, 
+and we are fully committed to ensuring that our project remains ethical, 
+transparent, and beneficial to society. Our goal is to create a system 
+that promotes social good while minimizing any potential negative impacts
 
 # Submission details
 
@@ -202,7 +205,7 @@ The code BCPNNSim2.0 is used in an EU-funded project EXTRA-BRAIN and SeRC (Swe
 All the improvments will be merged back to the main release and benifit the users from the other projects
 
 ## Describe the main algorithms and how they have been implemented and parallelized
-NEED INPUT
+NEED INPUT (~50-150 words)
 
 # Performance
 
