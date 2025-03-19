@@ -12,7 +12,7 @@
 
 ## Keywords:
 
-Computational brain science, Brain-like computing, Neural networks, Machine learning
+
 
 
 ## Proposal for civilian purposes
@@ -113,12 +113,27 @@ PyTorch, TensorFlow, Node.js, Express.js
 
 ## Name and version of the code
 
+FLUX.1-schnell
+
+Node.js v23.8.0
+
+Express.js v5
+
+ONNX v1.17.0
+
 PyTorch v2.6.0
 
 TensorFlow v2.18.1
 
 ## Webpage and other references
 
+https://github.com/inferless/flux.1-schnell
+
+https://github.com/nodejs/node
+
+https://github.com/expressjs/express
+
+https://github.com/onnx/models
 
 https://github.com/tensorflow/tensorflow
 
