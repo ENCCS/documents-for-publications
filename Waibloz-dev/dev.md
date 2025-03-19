@@ -142,10 +142,15 @@ https://github.com/pytorch/pytorch
 ## Licensing model
 
 FLUX.1 Schnell: Apache License
+
 Node.js v23.8.0: MIT License
+
 ONNX v1.17.0: Apache License 2.0
+
 Express.js v5: MIT License
+
 PyTorch: BSD-3 License
+
 TensorFlow: Apache License 2.0
 
 ## Contact information of the code developers
@@ -153,7 +158,7 @@ TensorFlow: Apache License 2.0
 
 
 # Your connection to the code (e.g. developer, collaborator to main developers, etc.)
-I am a user
+I am a user of all the codes listed above
 
 
 # Scalability and performance
@@ -187,7 +192,7 @@ I am a user
 
 
 ## Describe the application enabling/optimization work that needs to be performed to achieve the target performance
-parallelize the code using MPI for multiple GPUs
+
 
 
 ## Which computational performance limitations do you wish to solve with this project
@@ -197,9 +202,9 @@ I think there is a typo in the end, i.e. the word "hav"
 # Application Support Team (AST)
 
 ## Does your proposal require assistance from an AST on the selected partition(s)
-yes
+
 
 
 ## Is your proposal a follow up of another submitted Epicure project to use EuroHPC quota for providing application support? 
-No
+
 
