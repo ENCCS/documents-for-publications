@@ -5,7 +5,6 @@
 ## Project summary (abstract):
 
 
-
 ## Explain the scientific case of the project for which you intend to use the code(s):
 
 
@@ -165,7 +164,7 @@ I am a user of all the codes listed above
 
 ## Describe the scalability of the application and performance of the application
 
-** Is it possible to add some numbers here if it is not confidentail, e.g. **
+**Is it possible to add some numbers here if it is not confidentail, e.g.**
 
 on our local hardware i.e. GeForce RTX 4090, generating 100 4K (Ultra HD) images took 1000s using a single GPU
 
@@ -174,7 +173,7 @@ on a cloud-based setup i.e. Nvidia A100, generating 100 4K (Ultra HD) images too
 
 ## What is the target for scalability and performance
 
-** Is it possible to add some numbers here as well, e.g. one could say **
+**Is it possible to add some numbers here as well, e.g. one could say**
 
 Ideally, a single AI model should be able to generate images in under 5 seconds per request on a high-end GPU e.g. Nvidia A100, while batch processing should be able to generate hundreds of images per minute across 4 GPUs.
 
@@ -194,7 +193,7 @@ Ideally, a single AI model should be able to generate images in under 5 seconds 
 
 ## Main performance bottlenecks
 
-** Again here you could add some numbers as well to illustrate the bottleneck **
+**Again here you could add some numbers as well to illustrate the bottleneck**
 
 ## Describe possible solutions you have considered to improve the performance of the project
 
