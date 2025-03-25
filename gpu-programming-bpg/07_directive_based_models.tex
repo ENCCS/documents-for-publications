@@ -170,22 +170,6 @@ List~\ref{lst:07_module_lumi_cpp} and List~\ref{lst:07_module_lumi_fortran} prov
 \lstinputlisting[language=bash, firstline=27, lastline=40, caption={Modules and commands to compile and run Fortran code example using AMD GPU on LUMI-G HPC cluster.}, label={lst:07_module_lumi_fortran}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/07_module_lumi.pbs}
 
 
-\par
-Below we have four code examples for the trivially parallelizable vector addition problem using OpenACC (List~\ref{lst:07_vector_addition_acc_c} for C and List~\ref{lst:07_vector_addition_acc_f} for Fortran) and OpenMP (List~\ref{lst:07_vector_addition_mp_c} for C and List~\ref{lst:07_vector_addition_mp_f} for Fortran).
-
-
-\lstinputlisting[language=c++, firstline=4, lastline=23, caption={Code example for the trivially parallelizable vector addition problem using OpenACC C++.}, label={lst:07_vector_addition_acc_c}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/07_vector_addition.cpp}
-
-
-\lstinputlisting[language=fortran, firstline=4, lastline=23, caption={Code example for the trivially parallelizable vector addition problem using OpenACC Fortran.}, label={lst:07_vector_addition_acc_f}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/07_vector_addition.f}
-
-
-\lstinputlisting[language=c++, firstline=33, lastline=53, caption={Code example for the trivially parallelizable vector addition problem using OpenMP C++.}, label={lst:07_vector_addition_mp_c}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/07_vector_addition.cpp}
-
-
-\lstinputlisting[language=fortran, firstline=34, lastline=52, caption={Code example for the trivially parallelizable vector addition problem using OpenMP Fortran.}, label={lst:07_vector_addition_mp_f}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/07_vector_addition.f}
-
-
 % -------------------------------------------------------------------------------- %
 
 
@@ -327,35 +311,17 @@ check point3 & 10 & 10 \\
 
 
 \par
-In addition, we provide code examples for adding proper data mapping clauses explicitly to the directives using OpenACC (List~\ref{lst:07_add_data_mapping_clauses_acc_c} for C++ and List~\ref{lst:07_add_data_mapping_clauses_acc_f} for Fortran) and OpenMP (List~\ref{lst:07_add_data_mapping_clauses_mp_c} for C++ and List~\ref{lst:07_add_data_mapping_clauses_mp_f} for Fortran).
+In addition, code examples of a vector addition problem using OpenACC/OpenMP for C++ and Fortran are provided here in the subdirectory of this repository~\cite{gpu-programming-examples}
+
+\textbf{\textcolor{brown}{content/examples/exercise/07\_vec\_add/07\_vector\_addition\_acc.cpp}}
+
+\textbf{\textcolor{brown}{content/examples/exercise/07\_vec\_add/07\_vector\_addition\_acc.f}}
+
+\textbf{\textcolor{brown}{content/examples/exercise/07\_vec\_add/07\_vector\_addition\_omp.cpp}}
+
+\textbf{\textcolor{brown}{content/examples/exercise/07\_vec\_add/07\_vector\_addition\_omp.f}}
 
 
-\lstinputlisting[language=c++, firstline=4, lastline=31, caption={Code example for adding proper data mapping clauses explicitly to the directives using OpenACC C++.}, label={lst:07_add_data_mapping_clauses_acc_c}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/07_add_data_mapping_clauses.cpp}
-
-
-\lstinputlisting[language=fortran, firstline=4, lastline=33, caption={Code example for adding proper data mapping clauses explicitly to the directives using OpenACC Fortran.}, label={lst:07_add_data_mapping_clauses_acc_f}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/07_add_data_mapping_clauses.f}
-
-
-\lstinputlisting[language=c++, firstline=41, lastline=67, caption={Code example for adding proper data mapping clauses explicitly to the directives using OpenMP C++.}, label={lst:07_add_data_mapping_clauses_mp_c}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/07_add_data_mapping_clauses.cpp}
-
-
-\lstinputlisting[language=fortran, firstline=43, lastline=70, caption={Code example for adding proper data mapping clauses explicitly to the directives using OpenMP Fortran.}, label={lst:07_add_data_mapping_clauses_mp_f}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/07_add_data_mapping_clauses.f}
-
-
-\par
-The solutions of four code examples for adding proper data mapping clauses explicitly to the directives are provided below using OpenACC (List~\ref{lst:07_add_data_mapping_clauses_solution_acc_c} for C++ and List~\ref{lst:07_add_data_mapping_clauses_solution_acc_f} for Fortran) and OpenMP (List~\ref{lst:07_add_data_mapping_clauses_solution_mp_c} for C++ and List~\ref{lst:07_add_data_mapping_clauses_solution_mp_f} for Fortran).
-
-
-\lstinputlisting[language=c++, firstline=4, lastline=30, caption={Solution (the 16$^{th}$ line) of the code example for adding proper data mapping clauses explicitly to the directives using OpenACC C++.}, label={lst:07_add_data_mapping_clauses_solution_acc_c}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/07_add_data_mapping_clauses_solution.cpp}
-
-
-\lstinputlisting[language=fortran, firstline=4, lastline=29, caption={Solution (the 14$^{th}$ line) of the code example for adding proper data mapping clauses explicitly to the directives using OpenACC Fortran.}, label={lst:07_add_data_mapping_clauses_solution_acc_f}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/07_add_data_mapping_clauses_solution.f}
-
-
-\lstinputlisting[language=c++, firstline=40, lastline=67, caption={Solution (the 16$^{th}$ line) of the code example for adding proper data mapping clauses explicitly to the directives using OpenMP C++.}, label={lst:07_add_data_mapping_clauses_solution_mp_c}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/07_add_data_mapping_clauses_solution.cpp}
-
-
-\lstinputlisting[language=fortran, firstline=39, lastline=63, caption={Solution (the 14$^{th}$ line) of the code example for adding proper data mapping clauses explicitly to the directives using OpenMP Fortran.}, label={lst:07_add_data_mapping_clauses_solution_mp_f}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/07_add_data_mapping_clauses_solution.f}
 
 
 \subsubsection{Optimize Data Transfer}

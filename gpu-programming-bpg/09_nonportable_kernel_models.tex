@@ -76,20 +76,8 @@ In the code examples, we default to use device 0.
 
 \par
 To demonstrate the fundamental features of CUDA/HIP programming, we begin with a straightforward task of element-wise vector addition.
-The code examples below demonstrate how to utilize CUDA (List~\ref{lst:09_vector_addition_cuda}) and HIP (List~\ref{lst:09_vector_addition_hip}) for efficiently executing this operation.
-In addition, the code samples of portable kernel-based models of OpenCL (List~\ref{lst:09_vector_addition_opencl}) and SYCL (List~\ref{lst:09_vector_addition_sycl}) are also provided for a comparative purpose.
-
-
-\lstinputlisting[language=c++, caption={The~\lq\lq Vector Addition\rq\rq~example of CUDA.}, label={lst:09_vector_addition_cuda}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/09_vector_addition_cuda.cpp}
-
-
-\lstinputlisting[language=c++, caption={The~\lq\lq Vector Addition\rq\rq~example of HIP.}, label={lst:09_vector_addition_hip}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/09_vector_addition_hip.cpp}
-
-
-\lstinputlisting[language=c++, caption={The~\lq\lq Vector Addition\rq\rq~example of OpenCL.}, label={lst:09_vector_addition_opencl}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/09_vector_addition_opencl.cpp}
-
-
-\lstinputlisting[language=c++, caption={The~\lq\lq Vector Addition\rq\rq~example of SYCL.}, label={lst:09_vector_addition_sycl}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/09_vector_addition_sycl.cpp}
+The code examples demonstrate how to utilize CUDA (\textbf{\textcolor{brown}{content/examples/exercise/non-portable-kernel-models/cuda-vector-add.cu}}) and HIP (\textbf{\textcolor{brown}{content/examples/exercise/non-portable-kernel-models/hip-vector-add.cpp}}) for efficiently executing this operation.
+In addition, the code samples of portable kernel-based models of OpenCL (\textbf{\textcolor{brown}{content/examples/exercise/non-portable-kernel-models/opencl-vector-add.c}}) and SYCL (\textbf{\textcolor{brown}{content/examples/exercise/non-portable-kernel-models/sycl-vector-add.cpp}}) are also provided for a comparative purpose.
 
 
 \par
@@ -146,17 +134,7 @@ For a while already GPUs support unified memory, which allows to use the same po
 This simplifies developing codes by removing the explicit data transfers.
 The data resides on CPU until it is needed on GPU or vice-versa.
 However the data transfers still happens~\lq\lq under the hood\rq\rq~and the developer needs to construct the code to avoid unnecessary transfers.
-Below one can see the modified code examples (List~\ref{lst:09_vector_addition_with_unified_memory_cuda} for CUDA, List~\ref{lst:09_vector_addition_with_unified_memory_hip} for HIP, and List~\ref{lst:09_vector_addition_with_unified_memory_sycl} for SYCL) for the vector addition program using unified memory in GPU.
-
-
-\lstinputlisting[language=c++, caption={The~\lq\lq Vector Addition with Unified Memory\rq\rq~example of CUDA.}, label={lst:09_vector_addition_with_unified_memory_cuda}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/09_vector_addition_with_unified_memory_cuda.cpp}
-
-
-\lstinputlisting[language=c++, caption={The~\lq\lq Vector Addition with Unified Memory\rq\rq~example of HIP.}, label={lst:09_vector_addition_with_unified_memory_hip}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/09_vector_addition_with_unified_memory_hip.cpp}
-
-
-\lstinputlisting[language=c++, caption={The~\lq\lq Vector Addition with Unified Memory\rq\rq~example of SYCL.}, label={lst:09_vector_addition_with_unified_memory_sycl}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/09_vector_addition_with_unified_memory_sycl.cpp}
-
+Below one can find the modified code examples (\textbf{\textcolor{brown}{content/examples/exercise/non-portable-kernel-models/cuda-vector-add-unified-memory.cu}} for CUDA, \textbf{\textcolor{brown}{content/examples/exercise/non-portable-kernel-models/hip-vector-add-unified-memory.cpp}} for HIP, and \textbf{\textcolor{brown}{content/examples/exercise/non-portable-kernel-models/sycl-vector-add-unified-memory.cpp}} for SYCL) for the vector addition program using unified memory in GPU.
 
 \par
 It is shown that the arrays $Ah$, $Bh$, $Ch$, and $Cref$ are using~\textbf{\textcolor{red}{cudaMallocManaged}} to allocate unified memory in GPU.
@@ -264,16 +242,8 @@ It is an important algorithmic building block with a wide range of applications 
 Matrix transpose~\cite{matrix_transpose} is a classic example in GPU programming where shared memory can significantly improve the performance~\cite{matrix_transpose_efficient, matrix_transpose_advanced}.
 The use of shared memory reduces global memory accesses and exploits the high bandwidth and low latency of shared memory.
 First as a reference we use a simple kernel which copy the data from one array to the other.
-The code examples of CUDA, HIP, and SYCL are provided in List~\ref{lst:09_matrix_transpose_cuda}, List~\ref{lst:09_matrix_transpose_hip}, and List~\ref{lst:09_matrix_transpose_sycl}, respectively.
+The code examples of CUDA, HIP, and SYCL are provided here \textbf{\textcolor{brown}{content/examples/exercise/non-portable-kernel-models/cuda-matrix-transpose-v0.cu}}, \textbf{\textcolor{brown}{content/examples/exercise/non-portable-kernel-models/hip-matrix-transpose-v0.cu}}, and \textbf{\textcolor{brown}{content/examples/exercise/non-portable-kernel-models/sycl-matrix-transpose-v0.cu}}, respectively in the subdirectory of this repository~\cite{gpu-programming-examples}.
 
-
-\lstinputlisting[language=c++, caption={The~\lq\lq Matrix Transpose\rq\rq~example of CUDA.}, label={lst:09_matrix_transpose_cuda}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/09_matrix_transpose_cuda.cpp}
-
-
-\lstinputlisting[language=c++, caption={The~\lq\lq Matrix Transpose\rq\rq~example of HIP.}, label={lst:09_matrix_transpose_hip}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/09_matrix_transpose_hip.cpp}
-
-
-\lstinputlisting[language=c++, caption={The~\lq\lq Matrix Transpose\rq\rq~example of SYCL.}, label={lst:09_matrix_transpose_sycl}, xleftmargin=0.05\textwidth, xrightmargin=0.05\textwidth]{code_examples/09_matrix_transpose_sycl.cpp}
 
 
 \par
