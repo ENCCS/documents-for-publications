@@ -127,7 +127,7 @@ Qiskit provides various tools for simulating quantum circuits under various nois
 
 #### 1. Depolarizing Noise Model 
 
-The depolarizing noise model represents a scenario where the quantum state loses its coherence and becomes a completely mixed state with a certain probability. Mathematically, for a single-qubit state $\rho$, the depolarizing channel $`\mathcal{E}_{\text{dep}}`$ $\mathcal{E}_{\text{dep}}$ $\mathcal{E}_{\text{dep}}$ is defined as:
+The depolarizing noise model represents a scenario where the quantum state loses its coherence and becomes a completely mixed state with a certain probability. Mathematically, for a single-qubit state $\rho$, the depolarizing channel $`\mathcal{E}_{\text{dep}}`$ is defined as:
 
 $$
 \mathcal{E}_{\text{dep}}(\rho) = (1 - p) \rho + p \frac{I}{2}
