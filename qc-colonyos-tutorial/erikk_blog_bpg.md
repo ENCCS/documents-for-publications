@@ -1,12 +1,15 @@
 # Distributed Quantum Computing of Electronic Structure with ColonyOS
 
+**Quantum computing is evolving rapidly across the globe and Europe is no exception, with investments powering new research frontiers and integrating technologies. But how do researchers and engineers efficiently orchestrate complex quantum computations across diverse hardware, given that classical and quantum hardware need to work side-by-side to achieve the end goal of the calculation(s)? This post explores how ColonyOS can transform and ease distributed quantum computing workflows.**
+
+
 ## Introduction
 
 Significant investments are being made in quantum computing across Europe. A key challenge in this rapidly evolving landscape is the development of frameworks that enable efficient orchestration of quantum computations. These frameworks must ensure that problem formulations are optimized and executed on the most suitable hardware.
 
 ## Problem Statement
 
-Researchers and innovators in quantum life sciences, materials sciences etc. require the ability to develop and test algorithms locally on their personal computers before scaling them up to more complex environments. This iterative process involves expanding the algorithm in terms of parameters, noise models, and system complexity. One common approach is to define a grid of hyperparameters, such as:
+Researchers and innovators in quantum life sciences, materials sciences and other deciplines require the ability to develop and test algorithms locally on their personal computers before scaling them up to more complex environments. This iterative process involves expanding the algorithm in terms of parameters, noise models, and system complexity. One common approach is to define a grid of hyperparameters, such as:
 
 ```python
 hyperparam_grid = [
@@ -24,7 +27,9 @@ hyperparam_grid = [
 ]
 ```
 
-Once the optimal configuration is identified, the next step is deploying the algorithm on a quantum computing backend for testing. Researchers also require the ability to collect and analyze data from these computations to build a performance profile across different European compute infrastructures.
+Once the optimal configuration is identified, the next step is deploying the algorithm on a quantum computing backend for testing. Researchers also require the ability to collect and analyze data from these computations to build a performance profile across different European compute infrastructures. 
+
+With these challenges in mind, let's explore how a well-structured workflow can address these needs.
 
 ## Workflow Design for Quantum Computing
 
@@ -76,6 +81,8 @@ The Hamiltonian is assembled for the specific system under study, ideally using 
 
 ![Workflow for computing ](img/quantum_workflow.png)
 
+Now after understanding the ideal workflow structure, let's examine how ColonyOS provides the infrastructure to implement it.
+
 ## Solution: Leveraging ColonyOS for Distributed Quantum Computing
 
 [ColonyOS](https://ar5iv.labs.arxiv.org/html/2403.16486) is an open-source meta-operating system designed to streamline workload execution across diverse and distributed computing environments, including cloud, edge, HPC, and IoT. This capability makes it well-suited for managing complex, resource-intensive quantum computing tasks. The software is available under the MIT License and can be accessed via GitHub. Comprehensive [tutorial notebooks](https://github.com/colonyos/tutorials) are also available to facilitate onboarding.
@@ -106,11 +113,13 @@ The distributed architecture, task orchestration capabilities, scalability, and 
 
 ## Implementation 
 
-The attempt made in this post is to describe the use of ColonyOS as an orchestrator for quantum computation tasks. The focus is on solving a simpler problem (a water ground state energy calculation) to illustrate the potential of the orchestrator and what it could mean for the distributed aspects of quantum computing.
+In this post, we demonstrate how ColonyOS serves as an orchestrator for quantum computation tasks. With focus on solving the ground state energy for a water molecule to showcase the orchestrator's capabilities and highlight its potential for distributed quantum computing.
+
+<!-- The attempt made in this post is to describe the use of ColonyOS as an orchestrator for quantum computation tasks. The focus is on solving a simpler problem (a water ground state energy calculation) to illustrate the potential of the orchestrator and what it could mean for the distributed aspects of quantum computing. -->
 
 ### What Is Measured to Evaluate the Calculations 
 
-Besides runtimes and ground state energy values generated from the calculations,, estimating how noise affects quantum circuits is important. To evaluate the performance of quantum circuits under noisy conditions, there are numerous metrics that can be used. In the present work the implementation covers Shannon Entropy and Jensen-Shannon Divergence (JSD) as a starting point. A few sections below will be used to elaborate on this using qiskit as a reference.
+Besides runtimes and ground state energy values generated from the calculations, estimating how noise affects quantum circuits is important. To evaluate the performance of quantum circuits under noisy conditions, there are numerous metrics that can be used. In the present work the implementation covers Shannon Entropy and Jensen-Shannon Divergence (JSD) as a starting point. A few sections below will be used to elaborate on this using Qiskit as a reference.
 
 ### Noise Modeling in Qiskit 
 
@@ -118,13 +127,13 @@ Qiskit provides various tools for simulating quantum circuits under various nois
 
 #### 1. Depolarizing Noise Model 
 
-The depolarizing noise model represents a scenario where the quantum state loses its coherence and becomes a completely mixed state with a certain probability. Mathematically, for a single-qubit state \(\rho\), the depolarizing channel \(\mathcal{E}_{\text{dep}}\) is defined as:
+The depolarizing noise model represents a scenario where the quantum state loses its coherence and becomes a completely mixed state with a certain probability. Mathematically, for a single-qubit state $\rho$, the depolarizing channel $\mathcal{E}_{\text{dep}}$ is defined as:
 
 $$
 \mathcal{E}_{\text{dep}}(\rho) = (1 - p) \rho + p \frac{I}{2}
 $$
 
-where \(p\) is the depolarizing probability (error rate) and \(I\) is the identity matrix representing the maximally mixed state.
+where $p$ is the depolarizing probability (error rate) and $I$ is the identity matrix representing the maximally mixed state.
 
 For multi-qubit systems, the depolarizing channel generalizes by applying the noise independently to each qubit or collectively to the entire system, depending on the model specifics.
 
@@ -138,7 +147,7 @@ depolarizing_error_2q = noise.depolarizing_error(p, 2)
 
 In the depolarizing noise model, every gate operation is followed by the application of the depolarizing channel \(\mathcal{E}_{\text{dep}}\) with a specified probability. This simulates the randomization of the qubit state due to interactions with the environment.
 
-For example, after applying a gate \(U\), the state \(\rho'\) becomes:
+For example, after applying a gate $U$, the state $\rho'$ becomes:
 
 $$
 \rho' = \mathcal{E}_{\text{dep}}(U \rho U^\dagger) = (1 - p) U \rho U^\dagger + p \frac{I}{2}
@@ -147,13 +156,13 @@ $$
 
 #### 2. Bit-Flip Noise Model 
 
-The bit-flip noise model simulates the error where a qubit flips its state from \(|0\rangle\) to \(|1\rangle\) or vice versa, akin to a classical bit flip. The bit-flip channel \(\mathcal{E}_{\text{bf}}\) for a single qubit is defined as:
+The bit-flip noise model simulates the error where a qubit flips its state from $|0\rangle$ to $|1\rangle$ or vice versa, akin to a classical bit flip. The bit-flip channel $\mathcal{E}_{\text{bf}}$ for a single qubit is defined as:
 
 $$
 \mathcal{E}_{\text{bf}}(\rho) = (1 - p) \rho + p X \rho X^\dagger ,
 $$
 
-where \(X\) is the Pauli-X operator, and \(p\) is the probability of a bit-flip error.
+where $X$ is the Pauli-X operator, and $p$ is the probability of a bit-flip error.
 
 In Qiskit, bit-flip errors are introduced using the pauli_error function:
 
@@ -162,14 +171,13 @@ bit_flip_error_1q = noise.pauli_error([('X', p), ('I', 1 - p)])
 bit_flip_error_2q = noise.pauli_error([('XX', p), ('II', 1 - p)])
 </code>
 
-For this model, every gate operation is followed by the application of the depolarizing channel \(\mathcal{E}_{\text{dep}}\) with a specified probability. This simulates the randomization of the qubit state due to interactions with the environment.
+For this model, every gate operation is followed by the application of the depolarizing channel $\mathcal{E}_{\text{dep}}$ with a specified probability. This simulates the randomization of the qubit state due to interactions with the environment.
 
-For example, after applying a gate \(U\), the state \(\rho'\) becomes:
+For example, after applying a gate $U$, the state $\rho'$ becomes:
 
 $$
 \rho' = \mathcal{E}_{\text{dep}}(U \rho U^\dagger) = (1 - p) U \rho U^\dagger + p \frac{I}{2}
 $$
-
 
 ### Measuring the Impact of Noise 
 
@@ -177,28 +185,28 @@ To quantify how noise affects the quantum circuit, we analyze the output probabi
 
 #### Shannon Entropy 
 
-Shannon Entropy measures the uncertainty or randomness in a probability distribution. For a discrete random variable with possible outcomes \(\{x_i\}\) and corresponding probabilities \(\{p_i\}\), the Shannon entropy \(H\) is defined as:
+Shannon Entropy measures the uncertainty or randomness in a probability distribution. For a discrete random variable with possible outcomes ${x_i}$ and corresponding probabilities $p_i$, the Shannon entropy $H$ is defined as:
 
-\[ H(X) = -\sum_{i} p_i \log_2 p_i \]
+$H(X) = -\sum_{i} p_i \log_2 p_i$
 
 where:
 
-- $$\(H(X)\)$$: The Shannon entropy of the random variable \(X\).
-- $$\(p_i\)$$: The probability of the \(i\)-th outcome.
-- $$\(\log_2 p_i\)$$: The base-2 logarithm of \(p_i\), reflecting the amount of information in each outcome.
+- $H(X)$: The Shannon entropy of the random variable $X$.
+- $\(p_i\)$: The probability of the $i\textit{-th}$ outcome.
+- $log_2$ $p_i$: The base-2 logarithm of $p_i$, reflecting the amount of information in each outcome.
 
 In the context of quantum circuits, the entropy of the output distribution indicates how spread out the measurement outcomes are:
 
 - **Low Entropy**: Concentrated on specific outcomes, implying less uncertainty.
 - **High Entropy**: More uniform, indicating higher uncertainty and randomness, often due to noise.
 
-By calculating the entropy of both the noiseless (\(H_{\text{noiseless}}\)) and noisy (\(H_{\text{noisy}}\)) output distributions, we can assess the increase in uncertainty introduced by noise.
+By calculating the entropy of both the noiseless $H_{\text{noiseless}}$ and noisy $H_{\text{noisy}}$ output distributions, we can assess the increase in uncertainty introduced by noise.
 
 #### Jensen-Shannon Divergence (JSD) 
 
 The Jensen-Shannon Divergence is a method of measuring the similarity between two probability distributions. It is a symmetrized and smoothed version of the Kullback-Leibler divergence and is always bounded between 0 and 1 when using log base 2.
 
-For two probability distributions \(P = \{p_i\}\) and \(Q = \{q_i\}\), the JSD is defined as:
+For two probability distributions $P = \{p_i\}$ and $Q = q_i$, the JSD is defined as:
 
 $$
 \text{JSD}(P \parallel Q) = \frac{1}{2} D_{\text{KL}}(P \parallel M) + \frac{1}{2} D_{\text{KL}}(Q \parallel M)
@@ -206,15 +214,8 @@ $$
 
 where
 
-$$
-\(M = \frac{1}{2}(P + Q)\) is the average distribution,  \\
-\(D_{\text{KL}}(P \parallel M)\) is the Kullback-Leibler divergence from \(P\) to \(M\):
-$$
-
-$$
-D_{\text{KL}}(P \parallel M) = \sum_{i} p_i \log_2 \left( \frac{p_i}{m_i} \right)
-$$
-
+$M = \frac{1}{2}(P + Q)$ is the average distribution,
+$D_{\text{KL}}(P \parallel M)$ is the Kullback-Leibler divergence from $P$ to $M$, defined as: $D_{\text{KL}}(P \parallel M) = \sum_{i} p_i \log_2 \left( \frac{p_i}{m_i} \right)$
 
 The JSD effectively measures how much the noisy distribution deviates from the noiseless distribution:
 
@@ -239,10 +240,7 @@ $$
 \text{Entropy Ratio} = \frac{H_{\text{noisy}}}{H_{\text{noiseless}}}
 $$
 
-
 ---
-
-
 
 ## **Practical Implications of the Metrics**
 
