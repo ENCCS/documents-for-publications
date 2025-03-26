@@ -145,7 +145,7 @@ depolarizing_error_2q = noise.depolarizing_error(p, 2)
 >
 </code>
 
-In the depolarizing noise model, every gate operation is followed by the application of the depolarizing channel \(\mathcal{E}_{\text{dep}}\) with a specified probability. This simulates the randomization of the qubit state due to interactions with the environment.
+In the depolarizing noise model, every gate operation is followed by the application of the depolarizing channel $`\mathcal{E}_{\text{dep}}`$ with a specified probability. This simulates the randomization of the qubit state due to interactions with the environment.
 
 For example, after applying a gate $U$, the state $\rho'$ becomes:
 
