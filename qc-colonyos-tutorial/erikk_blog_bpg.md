@@ -45,7 +45,7 @@ The first way is through the metrics table—a simple (in-development) table tha
   <img src="img/metrics_table.png" alt="Metrics table showing noise model results">
   <figcaption><em>Figure 1: The ColonyOS metrics table displaying results from variational simulations with different noise models.</em></figcaption>
 </figure>
-
+<br> 
 
 The second way is through a workflow graph showing how each step in the workflow is connected and which steps depend on its information.
 
@@ -55,7 +55,7 @@ The second way is through a workflow graph showing how each step in the workflow
   <img src="img/graph_unfiltered.png" alt="Unfiltered workflow graph showing node connections">
   <figcaption><em>Figure 2: The ColonyOS workflow graph visualising the connections between different computation steps.</em></figcaption>
 </figure>
-
+<br> 
 
 Here, the legend explains which part of the calculation workflow the nodes correspond to. A node information panel displays metrics of the selected node. It allows one to compute rankings across nodes (similar to the metrics table) while rescaling and labelling nodes as a function of rank, as seen here:
 
@@ -65,7 +65,7 @@ Here, the legend explains which part of the calculation workflow the nodes corre
   <img src="img/graph_filtered.png" alt="Filtered workflow graph showing ranked nodes">
   <figcaption><em>Figure 3: The workflow graph ranked based on specific metrics, highlighting performance differences.</em></figcaption>
 </figure>
-
+<br> 
 
 With more complicated systems and calculations, the database could present a denser graph providing easily searchable sets of data.
 
