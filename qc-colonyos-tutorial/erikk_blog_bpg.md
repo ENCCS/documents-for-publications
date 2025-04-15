@@ -1,6 +1,9 @@
 # Distributed Quantum Computing workflows with ColonyOS
 
-Quantum computing is evolving rapidly across the globe, and Europe is no exception, with significant investments powering new research frontiers. However, a key challenge lies in efficiently orchestrating complex computations that often require integrating classical high-performance computing (HPC) resources with diverse quantum hardware. Here is an overview on [ColonyOS](https://colonyos.io/), an open-source meta-operating system designed to address this need by orchestrating distributed computing workflows across heterogeneous environments (including cloud, HPC, standalone workstations, and can be extended towards quantum systems). The following sections discuss the benefits of such orchestration, highlight key ColonyOS features, and showcase example applications in managing quantum computations. ColonyOS has the potential to streamline hybrid calculations and accelerate the path towards quantum-accelerated supercomputing.
+Quantum computing is evolving rapidly across the globe, and Europe is no exception, with significant investments powering new research frontiers. However, a key challenge lies in efficiently orchestrating complex computations that often require integrating classical high-performance computing (HPC) resources with diverse quantum hardware. Here is an overview on [ColonyOS](https://colonyos.io/), an open-source meta-operating system designed to address this need by orchestrating distributed computing workflows across heterogeneous environments (including cloud, HPC, standalone workstations, and can be extended towards quantum systems). 
+
+The following sections discuss the benefits of such orchestration, highlight key ColonyOS features, and showcase example applications in managing quantum computations. ColonyOS has the potential to streamline hybrid calculations and accelerate the path towards quantum-accelerated supercomputing.
+
 ## The need for distributed quantum computing
 
 Quantum computing scientists and engineers across different disciplines need to leverage classical and quantum resources in their workflows. They need to develop and test algorithms locally on their personal computers before scaling them up to more complex environments. This iterative process involves expanding the algorithm in terms of parameters, noise models, system complexity, and other details. The next step is to run the workflow on a quantum computer with a few qubits. Of course, due to the limited accessibility to quantum hardware or the limited qubits available, a common target of that workflow is to run it on a powerful computer, which can be an HPC resource capable of simulating hundreds of qubits with the help of some packages and software development kits. Such solutions have the potential to use extensive resources, making it suitable to distribute the workflow over multiple compute resources. For reusability, users require the ability to access those resources seamlessly, saving time by storing profiles of the hardware that this specific workflow can run on across different European compute infrastructures.
@@ -23,15 +26,13 @@ The platform enables users to define complex, multi-step workflows across distri
 
 Given the potential for node failures in distributed infrastructures, ColonyOS is designed to reassign tasks dynamically if an executor fails. This approach minimises computation disruptions and enhances overall system reliability.
 
-### Platform-Agnostic Integration
+### Platform-Agnostic integration
 
 ColonyOS can operate across multiple platforms, including cloud services and HPC environments. This flexibility aligns with the hybrid quantum-classical infrastructures often required for quantum computing workflows, allowing for efficient orchestration of tasks on both classical supercomputers and quantum processors.
 
 The distributed architecture, task orchestration capabilities, and scalability of ColonyOS make it a powerful solution for managing quantum computing workflows. By leveraging ColonyOS, users can efficiently coordinate tasks across quantum and classical computing environments, accelerating the development and deployment of quantum algorithms that are advancing toward further use in quantum-accelerated supercomputing.
 
-
 ## Example: orchestrating and visualising quantum computing workflows with ColonyOS
----
 
 The following snippets are related to an example where ColonyOS orchestrated Qiskit variational calculations with different noise models. ColonyOS generated multiple simulations accounting for different noise models. For more implementation details and related code, please visit the blog post [here](https://www.ekprojectjournal.com/doku.php?id=projects:quantum:distributed).
 
@@ -39,25 +40,27 @@ ColonyOS serialises Qiskit objects, metrics, and metadata from each part of the 
 
 The first way is through the metrics table—a simple (in-development) table that displays each noise simulation computation along with data from its related variational simulation.
 
-<!-- ![Metrics table](img/metrics_table.png)
-*Figure 1: The ColonyOS metrics table displaying results from variational simulations with different noise models.* -->
-<figure>
+![Metrics table](img/metrics_table.png)
+<br>
+*Figure 1: The ColonyOS metrics table displaying results from variational simulations with different noise models.*
+<!-- <figure>
   <img src="img/metrics_table.png" alt="Metrics table showing noise model results">
   <figcaption><em>Figure 1: The ColonyOS metrics table displaying results from variational simulations with different noise models.</em></figcaption>
 </figure>
 <br> 
-<br>
+<br> -->
 
 The second way is through a workflow graph showing how each step in the workflow is connected and which steps depend on its information.
 
-<!-- ![Workflow unfiltered graph](img/graph_unfiltered.png)
-*Figure 2: The ColonyOS workflow graph visualising the connections between different computation steps.* -->
-<figure>
+![Workflow unfiltered graph](img/graph_unfiltered.png)
+<br>
+*Figure 2: The ColonyOS workflow graph visualising the connections between different computation steps.*
+<!-- <figure>
   <img src="img/graph_unfiltered.png" alt="Unfiltered workflow graph showing node connections">
   <figcaption><em>Figure 2: The ColonyOS workflow graph visualising the connections between different computation steps.</em></figcaption>
 </figure>
 <br>
-<br>
+<br> -->
 
 Here, the legend explains which part of the calculation workflow the nodes correspond to. A node information panel displays metrics of the selected node. It allows one to compute rankings across nodes (similar to the metrics table) while rescaling and labelling nodes as a function of rank, as seen here:
 
