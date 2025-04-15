@@ -61,14 +61,15 @@ The second way is through a workflow graph showing how each step in the workflow
 
 Here, the legend explains which part of the calculation workflow the nodes correspond to. A node information panel displays metrics of the selected node. It allows one to compute rankings across nodes (similar to the metrics table) while rescaling and labelling nodes as a function of rank, as seen here:
 
-<!-- ![Workflow filtered graph](img/graph_filtered.png)
-*Figure 3: The workflow graph ranked based on specific metrics, highlighting performance differences.* -->
-<figure>
+![Workflow filtered graph](img/graph_filtered.png)
+<br>
+*Figure 3: The workflow graph ranked based on specific metrics, highlighting performance differences.*
+<!-- <figure>
   <img src="img/graph_filtered.png" alt="Filtered workflow graph showing ranked nodes">
   <figcaption><em>Figure 3: The workflow graph ranked based on specific metrics, highlighting performance differences.</em></figcaption>
 </figure>
 <br> 
-<br>
+<br> -->
 
 With more complicated systems and calculations, the database could present a denser graph providing easily searchable sets of data.
 
