@@ -14,6 +14,8 @@ Quantum computing scientists and engineers across different disciplines need to 
 
 ## Key features of ColonyOS that would help drive quantum-accelerated supercomputing
 
+ColonyOS offers several key features that could enable managing the quantum computing workflows and advancing quantum-accelerated supercomputing.
+
 ### Distributed microservice architectures
 
 ColonyOS employs a microservices architecture, where independent executors handle specific tasks. This design supports distributed quantum computing by allowing quantum tasks to be executed across geographically dispersed quantum and classical computing resources in a hybrid fashion. Executors can be deployed independently and scaled horizontally, ensuring efficient parallel processing.
@@ -38,7 +40,7 @@ The following snippets are related to an example where ColonyOS orchestrated Qis
 
 ColonyOS serialises Qiskit objects, metrics, and metadata from each part of the workflow into an SQLite database. This database is then exposed to localhost via a simple Flask API, which connects to a React frontend that presents two key views of the results data. Both views display the same data and allow ranking across a set of metrics but do so in different ways:
 
-The first way is through the metrics table—a simple (in-development) table that displays each noise simulation computation along with data from its related variational simulation.
+The first way is through the metrics table—a simple (in-development) table that displays each noise simulation computation along with data from its related variational simulation, as shown in the following figure:
 
 ![Metrics table](img/metrics_table.png)
 <br>
@@ -50,7 +52,7 @@ The first way is through the metrics table—a simple (in-development) table tha
 <br> 
 <br> -->
 
-The second way is through a workflow graph showing how each step in the workflow is connected and which steps depend on its information.
+The second way is through a workflow graph showing how each step in the workflow is connected and which steps depend on its information, as shown in the following figure:
 
 ![Workflow unfiltered graph](img/graph_unfiltered.png)
 <br>
@@ -62,7 +64,7 @@ The second way is through a workflow graph showing how each step in the workflow
 <br>
 <br> -->
 
-Here, the legend explains which part of the calculation workflow the nodes correspond to. A node information panel displays metrics of the selected node. It allows one to compute rankings across nodes (similar to the metrics table) while rescaling and labelling nodes as a function of rank, as seen here:
+Here, the legend explains which part of the calculation workflow the nodes correspond to. A node information panel displays metrics of the selected node. It allows to compute rankings across nodes (similar to the metrics table shown above in Figure 1) while rescaling and labelling nodes as a function of rank, as depicted here:
 
 ![Workflow filtered graph](img/graph_filtered.png)
 <br>
@@ -74,7 +76,7 @@ Here, the legend explains which part of the calculation workflow the nodes corre
 <br> 
 <br> -->
 
-With more complicated systems and calculations, the database could present a denser graph providing easily searchable sets of data.
+Workth-mentioning that with more complex systems and calculations, the database could present a denser graph providing easily searchable sets of data.
 
 ---
 
@@ -84,6 +86,6 @@ These examples highlight ongoing efforts to integrate [ColonyOS](https://colonyo
 
 ## Acknowledgement
 
-This blog post is based on work by [Erik Källman](https://www.ri.se/sv/person/erik-kallman), first presented at the [Nordic Quantum Autumn School 2024](https://enccs.github.io/qas2024/_downloads/e7a4c465a0e6318304e776636c9d317f/QAS-COS.pdf) and further elaborated in an accompanying blog post [here](https://www.ekprojectjournal.com/doku.php?id=projects:quantum:distributed). The original content can be found in [Erik's blog](https://www.ekprojectjournal.com/doku.php?id=projects:quantum:distributed). The concepts and implementations have been adapted and expanded with permission to showcase the potential of [ColonyOS](https://colonyos.io/) in distributed quantum computing workflows. We thank [Erik Källman](https://www.ri.se/sv/person/erik-kallman) for his work in this area and for sharing his insights during the [Nordic Quantum Autumn School 2024](https://enccs.github.io/qas2024/cos/).
+This blog post is based on work by [Erik Källman](https://www.ri.se/sv/person/erik-kallman), first presented at the [Nordic Quantum Autumn School 2024](https://enccs.github.io/qas2024/_downloads/e7a4c465a0e6318304e776636c9d317f/QAS-COS.pdf) and further elaborated in an accompanying blog post [here](https://www.ekprojectjournal.com/doku.php?id=projects:quantum:distributed). The original content can be found in [Erik Källman's blog](https://www.ekprojectjournal.com/doku.php?id=projects:quantum:distributed). The concepts and implementations have been adapted and expanded with permission to showcase the potential of [ColonyOS](https://colonyos.io/) in distributed quantum computing workflows. We thank [Erik Källman](https://www.ri.se/sv/person/erik-kallman) for his work in this area and for sharing his insights during the [Nordic Quantum Autumn School 2024](https://enccs.github.io/qas2024/cos/).
 
 ---
